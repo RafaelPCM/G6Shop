@@ -9,7 +9,7 @@
 .factorypath
 .project
 .settings/
-src/main/resources/application.properties
+# src/main/resources/application.properties
 .fake
 .ionide
 .devcontainer/
