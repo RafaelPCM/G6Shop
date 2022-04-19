@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/fragments :: source-includes">
+	<div th:replace="fragments/fragments :: header"> </div>
+	
+	<title>Alterar usuário</title>
+</head>
+
+
+<body>
+
+	<td th:switch="${status}">
+
+        <span th:case="user_passwords_dont_match">
+
+            <div id="moo" class="alert alert-danger alert-dismissible show fade" role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                Senha do usuário incorreta!
+            </div>
+
+        </span>
+
+	</td>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+				<div class="pb-2 mt-4 mb-4 border-bottom title">
+					<label class="lb-lg">
+						<h2>Alterar usuário</h2>
+					</label>
+				</div>
+
+				<div class="justify-content-center titleLike">
+
+					<form th:action="@{alteruser}" th:object="${us}"
+						method="POST">
+
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Novo
+								nome: <span class="mandatory">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control validate"
+									th:field="*{username}" id="username"
+									name="username" required aria-required="true">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label
+								class="col-sm-3 col-form-label">Matrícula:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control validate"
+									th:field="*{registrationNumber}"
+									id="registrationNumber"
+									name="registrationNumber">
+							</div>
+						</div>
+
+
+						<div id="div1">
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">Insira sua
+									Senha: <span class="mandatory">*</span></label>
+								<div class="col-sm-9">
+									<input type="password"
+										class="form-control validate"
+										th:field="*{password}" id="confirm_old_password"
+										name="confirm_old_password"
+										placeholder="Confirme a senha antiga" required aria-required="true">
+								</div>
+							</div>
+						</div>
+
+						<div><input type="checkbox" name="c1" onclick="showMe('div2')">
+							Atualizar Senha? </div>
+
+							<!-- Script para mostrar a div de Nova senha -->
+						<script>
+							function showMe (box) {
+        
+							var chboxs = document.getElementsByName("c1");
+							var vis = "none";
+							for(var i=0;i<chboxs.length;i++) { 
+								if(chboxs[i].checked){
+									vis = "block";
+									document.getElementById("new_password").removeAttribute("disabled");
+									document.getElementById("confirm_new_password").removeAttribute("disabled");
+									break;
+								}
+								else {
+									document.getElementById("new_password").setAttribute("disabled", true);
+									document.getElementById("confirm_new_password").setAttribute("disabled", true);
+									break;
+								}
+							}
+							document.getElementById(box).style.display = vis;
+						}
+					   </script>
+
+						<div  id="div2" style="display: none;">
+
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">Nova
+									Senha: <span class="mandatory">*</span></label>
+								<div class="col-sm-9">
+									<input type="password"
+										class="form-control validate"
+										th:field="*{new_password}" id="new_password"
+										name="new_password"
+										placeholder="Insira a nova senha" disabled required aria-required="true">
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="staticEmail"
+									class="col-sm-3 col-form-label">Confirme nova
+									senha: <span class="mandatory">*</span></label>
+								<div class="col-sm-9">
+									<input type="password"
+										class="form-control validate"
+										id="confirm_new_password"
+										placeholder="Confirm New Password" disabled required aria-required="true">
+									<input type="hidden" th:field="*{id}" />
+								</div>
+							</div>
+
+							<!-- Script para confirmar a nova senha -->
+							<script>
+								var new_password = document.getElementById("new_password")
+									, confirm_new_password = document.getElementById("confirm_new_password");
+
+								function validatePassword() {									
+									if (new_password.value != confirm_new_password.value) {
+									confirm_new_password.setCustomValidity("Passwords Don't Match");
+									} else {
+										confirm_new_password.setCustomValidity('');
+									}
+								}
+
+								new_password.onchange = validatePassword;
+								confirm_new_password.onkeyup = validatePassword;
+						</script>
+
+						</div>
+
+						<!-- TODO Fazer *urgente* antes de lançar pro beta aberto:
+									mudar o jeito em que usuario comum *nao* pode alterar a propria permissao
+									para melhorar a segurança do site/app -->
+						<div th:if='${currentUser.role.equals("ADMIN")}'>
+							<div class="form-group row">
+								<label for="inputPassword"
+									class="col-sm-3 col-form-label">Permissão:</label>
+								<div class="col-sm-9">
+									<select  class="form-control" th:field="*{role}" id="role" name="role">
+										<option value="ADMIN">Administrador</option>
+										<option value="USER">Usuário</option>
+									</select>
+								</div>
+							</div>
+						</div>	
+
+						<div th:unless='${currentUser.role.equals("ADMIN")}'>
+							<div class="form-group row">
+								<label for="inputPassword"
+									class="col-sm-3 col-form-label">Permissão:</label>
+								<div class="col-sm-9">
+									<p class="form-control" th:text="${us.role}" id="role" name="role"></p>
+									<select  class="form-control" th:field="*{role}" id="role" name="role" hidden>
+										<option value="ADMIN">Administrador</option>
+										<option value="USER">Usuário</option>
+										</select>
+								</div>
+							</div>
+						</div>	
+
+						<div th:replace="fragments/fragments :: submitAndCancelButtons"></div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<div th:replace="fragments/fragments :: footer"> </div>
+
+</html>

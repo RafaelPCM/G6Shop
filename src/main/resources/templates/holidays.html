@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/fragments :: source-includes">
+	<div th:replace="fragments/fragments :: header"> </div>
+
+	<title>Fériado</title>
+
+	<!--- TODO adicionar ordenamento de valores nas demais tabelas do programa -->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var holidays = /*[[${holidays}]]*/ 'holidays';
+		/*]]>*/
+		$(document).ready(function () {
+			var table = $('#holidaystable').DataTable({
+				"data": holidays,
+				"sAjaxDataProp": "",
+				"oLanguage": oLanguage,
+				"pageLength": 50,
+				"aoColumns": [
+					{ "mData": "id" },
+					{ "mData": "localDateTimeInString" },
+					{ "mData": "description" },
+					{
+						"mRender": function (data, type, full) {
+							return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterholiday?id=" + full["id"] + "'>Alterar</a>";
+						}, "orderable": false
+					},
+					{
+						"mRender": function (data, type, full) {
+							return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteholiday?id=" + full["id"] + "'>Excluir</button>";
+						}, "orderable": false
+					}
+				]
+			});
+		});
+	</script>
+
+</head>
+
+<body>
+
+	<td th:switch="${status}">
+
+		<span th:case="deleted">
+
+			<div id="moo"
+				class="alert alert-success alert-dismissible show fade"
+				role="alert" auto-close="4000">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close"><span aria-hidden="true">&times;</span>
+				</button>
+				Feriado deletado com sucesso!
+			</div>
+
+		</span>
+
+		<span th:case="altered">
+
+			<div id="moo"
+				class="alert alert-success alert-dismissible show fade"
+				role="alert" auto-close="4000">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close"><span aria-hidden="true">&times;</span>
+				</button>
+				Feriado alterado com sucesso!
+			</div>
+
+		</span>
+
+		<span th:case="created">
+
+			<div id="moo"
+				class="alert alert-success alert-dismissible show fade"
+				role="alert" auto-close="4000">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close"><span aria-hidden="true">&times;</span>
+				</button>
+				Feriado criado com sucesso!
+			</div>
+
+		</span>
+
+		<span th:case="notfound">
+
+			<div id="moo" class="alert alert-danger alert-dismissible show fade"
+				role="alert" auto-close="4000">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close"><span aria-hidden="true">&times;</span>
+				</button>
+				Feriado não encontrado
+			</div>
+
+		</span>
+
+	</td>
+
+
+	<div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
+			<h2>Feriados</h2>
+		</label><button onclick="location.href='alterholiday';"
+			class="btn btn-primary float-right btn-sm button-new">Adicionar
+			Feriado</button></div>
+
+	<div class="d-flex justify-content-center">
+		<table
+			class="table table-striped table-bordered table-hover table-fit2 table-sm text-center align-middle"
+			id="holidaystable">
+			<caption>Lista de feriados</caption>
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Feriado</th>
+					<th scope="col">Descrição</th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</body>
+
+<div th:replace="fragments/fragments :: footer"> </div>
+
+
+</html>

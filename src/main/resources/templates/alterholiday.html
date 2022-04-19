@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/fragments :: source-includes">
+	<div th:replace="fragments/fragments :: header"> </div>
+
+	<title th:if="${newEntity}">
+		Novo feriado
+	</title>
+	<title th:unless="${newEntity}">
+		Alterar feriado
+	</title>
+</head>
+
+<body>
+	<div class="pb-2 mt-4 mb-4 border-bottom title">
+		<label class="lb-lg">
+			<h2 th:if="${newEntity}">
+				Novo feriado
+			</h2>
+			<h2 th:unless="${newEntity}">
+				Alterar feriado
+			</h2>
+		</label>
+	</div>
+
+	<div class="col-md-5  justify-content-center titleLike">
+
+		<form th:action="@{alterholiday}" th:object="${hp}" method="POST">
+
+			<div th:unless="${newEntity}" class="form-group row">
+				<label for="id" class="col-sm-3 col-form-label">Id: </label>
+				<div class="col-sm-9">
+					<p th:text="${hp.id}">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3 col-form-label">Alterar Data: <span class="mandatory">*</span></label>
+				<div class="col-sm-9">
+					<input type="date" class="form-control validate"
+						th:field="*{localDate}" id="localDate" name="localDate"
+						required aria-required="true">
+					<input type="hidden" th:field="*{id}" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3 col-form-label">Novo Feriado: <span class="mandatory">*</span></label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control validate"
+						th:field="*{description}" id="description"
+						name="description" required aria-required="true">
+				</div>
+			</div>
+
+			<div th:replace="fragments/fragments :: submitAndCancelButtons">
+			</div>
+
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+		</form>
+	</div>
+
+
+
+</body>
+
+<div th:replace="fragments/fragments :: footer"> </div>
+
+</html>

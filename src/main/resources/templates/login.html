@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments/fragments :: source-includes">
+
+	<title>Login</title>
+</head>
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+
+	<body>
+		<div class="d-flex justify-content-center vertical-center">
+			<article class="card-body col-md-5 text-center ">
+				<div class="marginBottom">
+					<img th:src="@{/images/favicon.ico}" alt="logo"
+						style="width: 170px;">
+				</div>
+				<br>
+				<h5 class="card-title text-center mb-4 mt-1 ">Acessar a G6Shop</h5>
+
+				<div th:if="${param.error}">
+					Nome ou senha inválida.
+				</div>
+				<div th:if="${param.logout}">
+					Você saiu do sistema.
+				</div>
+
+				<form th:action="@{/login}" method="POST">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"> <em
+										class="fa fa-user"></em></span>
+							</div>
+							<input name="username" class="form-control"
+								placeholder="Login" type="text" id="IdEmail">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"> <em
+										class="fa fa-lock"></em> </span>
+							</div>
+							<input name="password" class="form-control"
+								placeholder="******" type="password"
+								id="IdSenha">
+						</div>
+					</div>
+					<input type="submit" value="Entrar"
+						class="btn btn-primary btn-block"></input>
+				</form>
+
+			</article>
+		</div>
+	</body>
+
+	<div th:replace="fragments/fragments :: footer"> </div>
+
+</div>
+
+
+</html>

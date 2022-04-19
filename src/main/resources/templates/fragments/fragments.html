@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<!-- Cabeçalho -->
+<div th:fragment="source-includes">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        
+
+
+    <style>
+        .table td,
+        .table th {
+            vertical-align: middle;
+        }
+        .current_image{
+            max-height:50px !important;
+            max-width:50px !important;
+            background-color:#afafb1;
+        }
+    </style>
+
+
+<style>
+    /* Outro jeito de por o "*" */
+    /* .required {
+    position: absolute;
+    margin-left: -50px;
+    margin-top: -45px;
+    color: #FB0000;
+    font-size: 20px; */
+
+    .mandatory {
+    position: absolute;
+    margin-top: -5px;
+    color: #FB0000;
+    font-size: 24px;
+}
+</style>
+
+    <!-- Outro jeito de por o "*" -->
+    <!-- <script>
+        jQuery(document).ready(function() {
+        jQuery("[required]").after("<span class='required'>*</span>");
+        });
+    </script> -->
+
+    <script>
+        $(function () {
+            $("textarea").each(function () {
+                this.setAttribute("style", "height:" + (this.scrollHeight) + "px;overflow-y:hidden;");
+            }).on("input", function () {
+                this.style.height = "auto";
+                this.style.height = (this.scrollHeight) + "px";
+            });
+        });
+    </script>
+
+    <script>
+        "use strict";
+        $(function () {
+            $("img").each(function () {
+                this.setAttribute("style", "max-height:600px;max-width:600px;");
+            });
+            $("#favicon").each(function () {
+                this.setAttribute("style", "width:40px;");
+            });
+        });
+    </script>
+
+    <link rel="shortcut icon" type="image/ico" href="/images/favicon.ico" />
+
+    <!-- Script para o alerta sumir com o tempo -->
+    <script th:fragment="alerttime">
+        $(function () {
+            var alert = $('div.alert[auto-close]');
+            alert.each(function () {
+                var that = $(this);
+                var time_period = that.attr('auto-close');
+                setTimeout(function () {
+                    that.alert('close');
+                }, time_period);
+            });
+        });
+    </script>
+
+    <script>
+        "use strict";
+        var oLanguage = {
+            "oAria": {
+                "sSortAscending": " - clicar/retornar para ordem ascendente",
+                "sSortDescending": " - clicar/retornar para ordem descendente"
+            },
+            "sInfoEmpty": "Não há entradas a serem mostradas",
+            "sEmptyTable": "Não há dados no banco de dados",
+            "sLoadingRecords": "Por favor aguarde - carregando...",
+            "sSearch": "Pesquisar:",
+            "sZeroRecords": "Nenhum registro no banco de dados",
+            "sLengthMenu": "Mostrar _MENU_ entradas",
+            "sInfoFiltered": " - filtrando a partir de _MAX_ registros",
+            "sProcessing": "Tabela de dados está ocupado no momento",
+            "sInfoThousands": ".",
+            "oPaginate": {
+                "sNext": "Próximo",
+                "sPrevious": "Anterior",
+                "sFirst": "Primeira página",
+                "sLast": "Última página"
+            },
+            "sInfo": "Mostrando _START_ a _END_ de um total de _TOTAL_ entradas"
+        };
+    </script>
+
+</div>
+
+<header th:fragment="header">
+
+    <nav class="navbar navbar-expand-sm bg-light navbar-light text-center">
+        <!-- Brand/logo -->
+        <a class="navbar-brand" href="/"> <img src="/images/favicon.ico"
+                alt="logo" id="favicon" style="width: 40px;">
+        </a>
+        <ul class="navbar-nav">
+
+            <li id="products" class="nav-item">
+                <a class="nav-link" href="/products">
+                    Produtos
+                </a>
+            </li>
+
+            <li id="holidays" class="nav-item">
+                <a class="nav-link" href="/holidays">
+                    Feriados
+                </a>
+            </li> 
+            <li id="users" class="nav-item">
+                <a class="nav-link" href="/users">
+                    Usuários
+                </a>
+            </li>
+
+        </ul>
+
+        <script>
+            "use strict";
+            var path = window.location.pathname;
+            var page = path.split("/").pop();
+            var timeLi = $("#" + page);
+            timeLi.addClass("active");
+        </script>
+
+        <!-- Logout -->
+        <ul class="navbar-nav ml-auto text-center">
+            <li class="nav-item mr-2 mt-1">
+                <span sec:authorize="isAuthenticated()">
+                    Logado como: <span sec:authentication="name"></span></span>
+            </li>
+            <li class="nav-item">
+                <form th:action="@{/logout}" method="post">
+                    <input class="btn btn-info btn-sm" type="submit"
+                        value="Sair" />
+                </form>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+Footer
+<footer th:fragment="footer" class="navbar row d-flex justify-content-center">
+    <!-- Copyright -->
+    <div class="page-footer font-small blue text-center">
+        2022 - G6Shop <br />
+        Todos os os direitos reservados.
+    </div> 
+    <!-- Copyright -->
+</footer>
+
+
+<!-- script para por a data e hora atual no input -->
+<script th:fragment="actualLocalDateTime">
+    $(document).ready(function () {
+        const dateTimeInput = document.getElementById("localDateTime");
+        var today = new Date();
+        dateTimeInput.value = today.getFullYear() + "-" + today.getMonth().toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0') + "T" + today.getHours().toString().padStart(2, '0') + ":" + today.getMinutes().toString().padStart(2, '0');
+    });
+</script>
+
+
+<!-- Script para remover imagem do input -->
+<script th:fragment="clearInputImg">
+    function clearInputFile(f) {
+        if (f.value) {
+            try {
+                f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
+            } catch (err) { }
+            if (f.value) { //for IE5 ~ IE10
+                var form = document.createElement('form'),
+                    parentNode = f.parentNode, ref = f.nextSibling;
+                form.appendChild(f);
+                form.reset();
+                parentNode.insertBefore(f, ref);
+            }
+            blah.src = "";
+            removeFile.hidden = true;
+        }
+    }
+</script>
+
+<!-- Script do botao para remover a imagem do input -->
+<script th:fragment="removeImgButton">
+    $(document).ready(function () {
+        const imgInp = document.getElementById("file");
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files;
+            if (file) {
+                removeFile.hidden = false;
+                blah.src = URL.createObjectURL(file);
+            }
+        }
+    });
+</script>
+
+
+<!-- Input com preview de imagem e botao de remover imagem selecionada -->
+<div th:fragment="inputImgPreviewRemove">
+
+    <script>
+        "use strict";
+        $(document).ready(function () {
+            const no_image_checkbox = document.getElementById("no_image_checkbox");
+            no_image_checkbox.onchange = evt => {
+                const file = document.getElementById("file");
+                const img = document.getElementById("blah");
+                const button = document.getElementById("removeFile");
+                if (no_image_checkbox.checked) {
+                    file.disabled = true;
+                    img.disabled = true;
+                    button.disabled = true;
+                } else {
+                    file.disabled = false;
+                    img.disabled = false;
+                    button.disabled = false;
+                }
+            }
+        });
+    </script>
+
+    <div class="form-group row">
+        <label path="file" class="col-sm-3 col-form-label">Nova imagem (Max 10
+            MB):</label>
+        <div class="col-sm-9">
+            <input type="checkbox" name="no_image_checkbox"
+                id="no_image_checkbox" unchecked> Remover
+            imagem</input>
+            <br>
+            <br>
+            <input type="file" accept="image/*" class="form-control" name="file"
+                id="file">
+            <br>
+            <img id="blah" src="" alt=""
+                style="max-width: 400px; max-height: 400px;" />
+            <br>
+            <button class="btn btn-dark btn-sm mt-2" type="button"
+                id="removeFile"
+                onclick="clearInputFile(document.getElementById('file'))"
+                hidden>Remover
+                imagem</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Botoes de enviar e cancelar -->
+<div th:fragment="submitAndCancelButtons">
+    <div class="form-group row">
+        <span class="col-sm-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+        </span>
+        <span class="col-sm-9">
+            <button class="btn btn-danger" type="button"
+                onclick="javascript:history.back()">Cancelar</button>
+        </span>
+    </div>
+</div>
+
+</html>
