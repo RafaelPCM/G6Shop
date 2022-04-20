@@ -21,6 +21,7 @@
 					{ "mData": "id" },
 					{ "mData": "localDateTimeInString" },
 					{ "mData": "description" },
+
 					{
 						"mRender": function (data, type, full) {
 							return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterholiday?id=" + full["id"] + "'>Alterar</a>";
@@ -31,6 +32,7 @@
 							return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteholiday?id=" + full["id"] + "'>Excluir</button>";
 						}, "orderable": false
 					}
+					
 				]
 			});
 		});

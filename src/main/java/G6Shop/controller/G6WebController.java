@@ -56,7 +56,7 @@ public class G6WebController {
 
 
   @Autowired
-  ProductsRepositoryManager productsRepository;
+  ProductsRepositoryManager productsRepositoryManager;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -109,27 +109,6 @@ public class G6WebController {
     return "redirect:products";
   }
 
-  @GetMapping("/products")
-  public String products(ModelMap model, @ModelAttribute(STATUS) Object statusAttribute) {
-    List<Products> products = new ArrayList<>();
-    User currentUser = getCurrentUser();
-    if (currentUser.getRole() != null) {
-      Iterable<Products> iterable = productsRepository.findAll();
-      Iterator<Products> iterator = iterable.iterator();
-      while (iterator.hasNext()) {
-        Products s = iterator.next();
-        products.add(s);
-      }
-    }
-    model.addAttribute(Page.PRODUCTS.toString(), products);
-    model.addAttribute(CURRENT_USER, currentUser);
-    if (statusAttribute instanceof Status) {
-      model.addAttribute(STATUS, statusAttribute.toString());
-    }
-
-    return Page.PRODUCTS.toString();
-  }
-
   @GetMapping("/login")
   public String login(Model model) throws IOException {
     return "login";
@@ -165,6 +144,85 @@ public class G6WebController {
     String currentPrincipalName = authentication.getName();
     return userRepository.findUsersWithSameName(currentPrincipalName).get(0);
   }
+
+
+  @GetMapping("/products")
+  public String products(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
+    List<Products> products = new ArrayList<>();
+    User currentUser = getCurrentUser();
+    if (currentUser.getRole() != null) {
+      Iterable<Products> iterable = productsRepositoryManager.findAll();
+      Iterator<Products> iterator = iterable.iterator();
+      while (iterator.hasNext()) {
+        Products s = iterator.next();
+        products.add(s);
+      }
+    }
+    model.addAttribute(Page.PRODUCTS.toString(), products);
+    model.addAttribute(CURRENT_USER, currentUser);
+    if (statusAttribute instanceof Status) {
+      model.addAttribute(STATUS, statusAttribute.toString());
+    }
+
+    return Page.PRODUCTS.toString();
+  }
+
+  
+  @GetMapping("/alterproduct")
+  public String showAlterProductPage(Model model, RedirectAttributes attributes,
+      @RequestParam(value = "id", required = false) Integer id) {
+    Products product;
+    if (id != null) {
+      model.addAttribute(NEW_ENTITY, false);
+      Optional<Products> optionalCurrentContact = productsRepositoryManager.findById(id);
+      if (optionalCurrentContact.isPresent()) {
+        product = optionalCurrentContact.get();
+      } else {
+        product = new Products();
+      }
+    } else {
+      model.addAttribute(NEW_ENTITY, true);
+      product = new Products();
+    }
+    model.addAttribute("prod", product);
+    return "alterproduct";
+  }
+
+  @PostMapping("/alterproduct")
+  @Transactional
+  public RedirectView alterProduct(RedirectAttributes attributes, @RequestParam("id") Integer id,
+      @RequestParam("name") String name,
+      @RequestParam("size") String size,
+      @RequestParam("price") Integer price
+      ) {
+    Optional<Products> optionalCurrentProduct = productsRepositoryManager.findById(id);
+
+    if (optionalCurrentProduct.isPresent()) {
+      var currentProduct = optionalCurrentProduct.get();
+      currentProduct.setName(name);
+      currentProduct.setSize(size);
+      currentProduct.setPrice(price);
+
+      productsRepositoryManager.save(currentProduct);
+    } else {
+      var product = new Products();
+      product.setName(name);
+      product.setSize(size);
+      product.setPrice(price);
+
+      productsRepositoryManager.save(product);
+    }
+    attributes.addFlashAttribute(STATUS, Status.ALTERED);
+    return new RedirectView(Page.PRODUCTS.toString());
+  }
+
+  @GetMapping("/deleteproduct")
+  public String deleteProduct(RedirectAttributes attributes, @RequestParam("id") int id) {
+    productsRepositoryManager.deleteById(id);
+    attributes.addFlashAttribute(STATUS, Status.DELETED);
+    return REDIRECT + Page.PRODUCTS.toString();
+  }
+  
 
   @GetMapping("/holidays")
   public String holidays(ModelMap model, @ModelAttribute(STATUS) Object statusAttribute) {
@@ -359,62 +417,6 @@ public class G6WebController {
     userRepository.deleteById(id);
     attributes.addFlashAttribute(STATUS, Status.DELETED);
     return REDIRECT + Page.USERS.toString();
-  }
-
-
-  @GetMapping("/alterproduct")
-  public String showAlterProductPage(Model model, RedirectAttributes attributes,
-      @RequestParam(value = "id", required = false) Integer id) {
-    Products product;
-    if (id != null) {
-      model.addAttribute(NEW_ENTITY, false);
-      Optional<Products> optionalCurrentContact = productsRepository.findById(id);
-      if (optionalCurrentContact.isPresent()) {
-        product = optionalCurrentContact.get();
-      } else {
-        product = new Products();
-      }
-    } else {
-      model.addAttribute(NEW_ENTITY, true);
-      product = new Products();
-    }
-    model.addAttribute("prod", product);
-    return "alterproduct";
-  }
-
-  @PostMapping("/alterproduct")
-  @Transactional
-  public RedirectView alterProduct(RedirectAttributes attributes, @RequestParam("id") Integer id,
-      @RequestParam("name") String name,
-      @RequestParam("size") String size,
-      @RequestParam("price") int price
-      ) {
-    Optional<Products> optionalCurrentProduct = productsRepository.findById(id);
-
-    if (optionalCurrentProduct.isPresent()) {
-      var currentProduct = optionalCurrentProduct.get();
-      currentProduct.setName(name);
-      currentProduct.setSize(size);
-      currentProduct.setPrice(price);
-
-      productsRepository.save(currentProduct);
-    } else {
-      var product = new Products();
-      product.setName(name);
-      product.setSize(size);
-      product.setPrice(price);
-
-      productsRepository.save(product);
-    }
-    attributes.addFlashAttribute(STATUS, Status.ALTERED);
-    return new RedirectView(Page.PRODUCTS.toString());
-  }
-
-  @GetMapping("/deleteproduct")
-  public String deleteProduct(RedirectAttributes attributes, @RequestParam("id") int id) {
-    productsRepository.deleteProductsById(id);
-    attributes.addFlashAttribute(STATUS, Status.DELETED);
-    return REDIRECT + Page.PRODUCTS.toString();
   }
 
 

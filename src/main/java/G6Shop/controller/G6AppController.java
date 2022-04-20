@@ -31,7 +31,7 @@ public class G6AppController {
     private String appName;
 
     @Autowired
-    ProductsRepositoryManager productsRepository;
+    ProductsRepositoryManager productsRepositoryManager;
 
     @Autowired
     private HolidayRepositoryManager holidayRepositoryManager;
@@ -44,11 +44,14 @@ public class G6AppController {
 
 
     @GetMapping(value = "/api/products")
-    public List<Products> productss() {
-        Iterable<Products> iterable = productsRepository.findAll();
-        List<Products> products = new ArrayList<>();
-        iterable.forEach(products::add);
-        return products;
+    public List<Products> getProducts() {
+        Iterable<Products> iterable = productsRepositoryManager.findAll();
+        Iterator<Products> iterator = iterable.iterator();
+        List<Products> result = new ArrayList<>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+        return result;
     }
 
 
@@ -68,14 +71,11 @@ public class G6AppController {
         return holidayRepositoryManager.getVersion();
     }
 
-    // @GetMapping("/api/products_version/{id}")
-    // public long getProductsVersion(@PathVariable("id") int id) {
-    //     Optional<Products> optional = timeTableRepositoryManager.findProductsById(id);
-    //     if (optional.isPresent()) {
-    //         return optional.get().getVersion();
-    //     }
-    //     return -1L;
-    // }
+    @GetMapping("/api/products_version")
+    public long getProductsVersion() {
+        return productsRepositoryManager.getVersion();
+    }
+
 
 
     @GetMapping("/api/server_time")

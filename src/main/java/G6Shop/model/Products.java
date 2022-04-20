@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,15 +17,13 @@ import org.springframework.lang.NonNull;
 public class Products implements ModelWithDrawablePath {
 
     @Id
-    @GeneratedValue
-    @NonNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NonNull
     private String name = "";
 
     private String size;
 
-    private int price;
+    private Integer price;
 
     private String drawablePath;
 
@@ -55,11 +54,11 @@ public class Products implements ModelWithDrawablePath {
         this.size = size;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return this.price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -78,35 +77,5 @@ public class Products implements ModelWithDrawablePath {
     public void setVersion(long version) {
         this.version = version;
     }
-
-    
-
-    // public TrainLine getTrainLine() {
-    //     return this.trainLine;
-    // }
-
-    // public void setTrainLine(TrainLine trainLine) {
-    //     this.trainLine = trainLine;
-    // }
-
-    // @Override
-    // public boolean equals(Object o) {
-    //     if (o == this)
-    //         return true;
-    //     if (!(o instanceof Products)) {
-    //         return false;
-    //     }
-    //     Products station = (Products) o;
-    //     return id == station.id && Objects.equals(name, station.name)
-    //             && Objects.equals(drawablePath, station.drawablePath) && version == station.version
-    //             && stationOrder == station.stationOrder && Objects.equals(trainLine, station.trainLine);
-    // }
-    // 
-    // @Override
-    // public String toString() {
-    //     return "{" + " id='" + getId() + "'" + ", name='" + getName() + "'" + ", drawablePath='" + getDrawablePath()
-    //             + "'" + ", version='" + getVersion() + "'" + ", stationOrder='" + getStationOrder() + "'"
-    //             + ", trainLine='" + getTrainLine() + "'" + "}";
-    // }
 
 }
