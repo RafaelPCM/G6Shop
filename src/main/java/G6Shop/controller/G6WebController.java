@@ -2,7 +2,6 @@ package G6Shop.controller;
 
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,17 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import G6Shop.model.Products;
-import G6Shop.model.Holiday;
 import G6Shop.model.ModelWithDrawablePath;
-import G6Shop.model.Produto;
 import G6Shop.model.User;
 import G6Shop.repository.UserRepository;
 import G6Shop.repositorymanager.ProductsRepositoryManager;
-import G6Shop.repositorymanager.HolidayRepositoryManager;
-import G6Shop.repositorymanager.ProdutoRepositoryManager;
-
-
-
 
 @Controller
 @ControllerAdvice
@@ -47,16 +38,10 @@ public class G6WebController {
   private static final String CURRENT_USER = "currentUser";
 
   @Autowired
-  private HolidayRepositoryManager holidayRepositoryManager;
-
-  @Autowired
   private UserRepository userRepository;
 
   @Autowired
   private FileLocationService fileLocationService;
-
-  @Autowired
-  private ProdutoRepositoryManager produtoRepositoryManager;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -83,8 +68,7 @@ public class G6WebController {
   }
 
   enum Page {
-    HOLIDAYS("holidays"), PRODUCTS("products"),USERS("users"),
-     ALTERUSER("alteruser"), PRODUTO("produto");
+    PRODUCTS("products"),USERS("users"), ALTERUSER("alteruser"), PRODUTO("produto");
 
     String name;
 
@@ -116,6 +100,19 @@ public class G6WebController {
     return "login";
   }
 
+  private void updateDrawablePath(ModelWithDrawablePath modelWithDrawablePath, String noImageCheckBox,
+      MultipartFile file) throws IOException {
+    if (noImageCheckBox == null) {
+      var originalName = file.getOriginalFilename();
+      if (originalName != null && !originalName.isEmpty()) {
+        String newFileName = fileLocationService.saveImage(file.getBytes(), file.getOriginalFilename());
+        modelWithDrawablePath.setDrawablePath(newFileName);
+      }
+    } else {
+      fileLocationService.deleteImage(modelWithDrawablePath.getDrawablePath());
+      modelWithDrawablePath.setDrawablePath("");
+    }
+  }
 
   @GetMapping("/users")
   public String users(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
@@ -147,88 +144,6 @@ public class G6WebController {
     return userRepository.findUsersWithSameName(currentPrincipalName).get(0);
   }
 
-
-  @GetMapping("/produto")
-  public String produto(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
-    List<Produto>produto = new ArrayList<>();
-    User currentUser = getCurrentUser();
-    if (currentUser.getRole() != null) {
-      Iterable<Produto> iterable = produtoRepositoryManager.findAll();
-      Iterator<Produto> iterator = iterable.iterator();
-      while (iterator.hasNext()) {
-        Produto s = iterator.next();
-        produto.add(s);
-      }
-    }
-    model.addAttribute(Page.PRODUTO.toString(), produto);
-    model.addAttribute(CURRENT_USER, currentUser);
-    if (statusAttribute instanceof Status) {
-      model.addAttribute(STATUS, statusAttribute.toString());
-    }
-
-    return Page.PRODUTO.toString();
-  }
-
-  
-  @GetMapping("/alterproduto")
-  public String showAlterProdutoPage(Model model, RedirectAttributes attributes,
-      @RequestParam(value = "id", required = false) Integer id) {
-    Produto produto;
-    if (id != null) {
-      model.addAttribute(NEW_ENTITY, false);
-      Optional<Produto> optionalCurrentContact = produtoRepositoryManager.findById(id);
-      if (optionalCurrentContact.isPresent()) {
-        produto = optionalCurrentContact.get();
-      } else {
-        produto = new Produto();
-      }
-    } else {
-      model.addAttribute(NEW_ENTITY, true);
-      produto = new Produto();
-    }
-    model.addAttribute("prod", produto);
-    return "alterproduto";
-  }
-
-  @PostMapping("/alterproduto")
-  @Transactional
-  public RedirectView alterProduto(RedirectAttributes attributes, @RequestParam("id") Integer id,
-      @RequestParam("name") String name,
-      @RequestParam("size") String size,
-      @RequestParam("price") Integer price
-      ) {
-    Optional<Produto> optionalCurrentProduto = produtoRepositoryManager.findById(id);
-
-    if (optionalCurrentProduto.isPresent()) {
-      var currentProduto = optionalCurrentProduto.get();
-      currentProduto.setName(name);
-      currentProduto.setSize(size);
-      currentProduto.setPrice(price);
-
-      produtoRepositoryManager.save(currentProduto);
-    } else {
-      var produto = new Produto();
-      produto.setName(name);
-      produto.setSize(size);
-      produto.setPrice(price);
-
-      produtoRepositoryManager.save(produto);
-    }
-    attributes.addFlashAttribute(STATUS, Status.ALTERED);
-    return new RedirectView(Page.PRODUTO.toString());
-  }
-
-  @GetMapping("/deleteproduto")
-  public String deleteProduto(RedirectAttributes attributes, @RequestParam("id") int id) {
-    produtoRepositoryManager.deleteById(id);
-    attributes.addFlashAttribute(STATUS, Status.DELETED);
-    return REDIRECT + Page.PRODUTO.toString();
-  }
-  
-
-  
-
-
   @GetMapping("/switchuserstatus")
   @Transactional
   public String switchUserStatus(@RequestParam("id") int id) {
@@ -242,8 +157,6 @@ public class G6WebController {
     }
     return buildRedirectWithStatusLink(Page.USERS, Status.ALTERED);
   }
-
-  
 
   @GetMapping("/alteruser")
   public String showAlterUserPage(Model model, RedirectAttributes attributes,
@@ -352,20 +265,6 @@ public class G6WebController {
   }
 
 
-  private void updateDrawablePath(ModelWithDrawablePath modelWithDrawablePath, String noImageCheckBox,
-      MultipartFile file) throws IOException {
-    if (noImageCheckBox == null) {
-      var originalName = file.getOriginalFilename();
-      if (originalName != null && !originalName.isEmpty()) {
-        String newFileName = fileLocationService.saveImage(file.getBytes(), file.getOriginalFilename());
-        modelWithDrawablePath.setDrawablePath(newFileName);
-      }
-    } else {
-      fileLocationService.deleteImage(modelWithDrawablePath.getDrawablePath());
-      modelWithDrawablePath.setDrawablePath("");
-    }
-  }
-
 
   @GetMapping("/products")
   public String products(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
@@ -375,8 +274,8 @@ public class G6WebController {
       Iterable<Products> iterable = productRepositoryManager.findAll();
       Iterator<Products> iterator = iterable.iterator();
       while (iterator.hasNext()) {
-        Products c = iterator.next();
-        products.add(c);
+        Products prod = iterator.next();
+        products.add(prod);
       }
     }
     model.addAttribute(Page.PRODUCTS.toString(), products);
@@ -413,7 +312,8 @@ public class G6WebController {
   @PostMapping("/alterproduct")
   @Transactional
   public RedirectView alterProduct(RedirectAttributes attributes, @RequestParam("id") Integer id,
-      @RequestParam("name") String name, @RequestParam("size") String size,
+      @RequestParam("name") String name,
+      @RequestParam("size") String size,
       @RequestParam("price") Integer price,
       @RequestParam(value = "no_image_checkbox", required = false) String noImageCheckBox,
       @RequestParam(value = "file", required = false) MultipartFile file) throws IllegalStateException, IOException {
@@ -447,10 +347,6 @@ public class G6WebController {
     }
     return REDIRECT + Page.PRODUCTS.toString();
   }
-
-
-
-
 
 
 }

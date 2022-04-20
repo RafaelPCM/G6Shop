@@ -10,7 +10,7 @@ import G6Shop.model.Version.VersionName;
 
 import java.util.*;
 
-interface ContactRepository extends CrudRepository<Products, Integer> {
+interface ProductsRepository extends CrudRepository<Products, Integer> {
 
     @Query("SELECT prod FROM Products prod where prod.name LIKE :name")
     List<Products> findProductByName(String name);
@@ -24,35 +24,35 @@ interface ContactRepository extends CrudRepository<Products, Integer> {
 public class ProductsRepositoryManager extends AbstractRepositoryManager {
 
     public List<Products> findProductByName(String name) {
-        return contactRepository.findProductByName(name);
+        return productsRepository.findProductByName(name);
     }
     
     public List<Products> findProductBySize(String size) {
-    return contactRepository.findProductBySize(size);
+    return productsRepository.findProductBySize(size);
     }
 
     @Autowired
-    private ContactRepository contactRepository;
+    private ProductsRepository productsRepository;
 
     public Iterable<Products> findAll() {
-        return contactRepository.findAll();
+        return productsRepository.findAll();
     }
 
     public Optional<Products> findById(int id) {
-        return contactRepository.findById(id);
+        return productsRepository.findById(id);
     }
 
-    public void save(Products contact) {
-        contactRepository.save(contact);
+    public void save(Products product) {
+        productsRepository.save(product);
         super.updateVersion(VersionName.CONTACT);
     }
 
     public void deleteById(int id) {
-        Optional<Products> optional = contactRepository.findById(id);
+        Optional<Products> optional = productsRepository.findById(id);
         if (optional.isPresent()) {
-            Products c = optional.get();
-            fileLocationService.deleteImage(c.getDrawablePath());
-            contactRepository.deleteById(c.getId());
+            Products prod = optional.get();
+            fileLocationService.deleteImage(prod.getDrawablePath());
+            productsRepository.deleteById(prod.getId());
         }
         updateVersion(VersionName.CONTACT);
     }
@@ -62,7 +62,7 @@ public class ProductsRepositoryManager extends AbstractRepositoryManager {
     }
 
     public long count() {
-        return contactRepository.count();
+        return productsRepository.count();
     }
 
 }
