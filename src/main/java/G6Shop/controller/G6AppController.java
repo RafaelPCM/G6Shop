@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import G6Shop.model.Contact;
+import G6Shop.model.Products;
 import G6Shop.model.Holiday;
 import G6Shop.model.Produto;
 import G6Shop.model.Version;
 import G6Shop.model.Version.VersionName;
 import G6Shop.repository.VersionRepository;
-import G6Shop.repositorymanager.ContactRepositoryManager;
+import G6Shop.repositorymanager.ProductsRepositoryManager;
 import G6Shop.repositorymanager.HolidayRepositoryManager;
 import G6Shop.repositorymanager.ProdutoRepositoryManager;
 
@@ -40,7 +40,7 @@ public class G6AppController {
 
     
     @Autowired
-    private ContactRepositoryManager contactRepositoryManager;
+    private ProductsRepositoryManager productRepositoryManager;
 
     @Autowired
     ServletContext context;
@@ -100,11 +100,11 @@ public class G6AppController {
     }
 
 
-    @GetMapping(value = "/api/contact")
-    public List<Contact> contactInJson() {
-        Iterable<Contact> iterable = contactRepositoryManager.findAll();
-        Iterator<Contact> iterator = iterable.iterator();
-        List<Contact> result = new ArrayList<>();
+    @GetMapping(value = "/api/product")
+    public List<Products> productInJson() {
+        Iterable<Products> iterable = productRepositoryManager.findAll();
+        Iterator<Products> iterator = iterable.iterator();
+        List<Products> result = new ArrayList<>();
         while (iterator.hasNext()) {
             result.add(iterator.next());
         }
@@ -112,9 +112,9 @@ public class G6AppController {
     }
 
 
-    @GetMapping("/api/contact_version")
-    public long getContactVersion() {
-        return contactRepositoryManager.getVersion();
+    @GetMapping("/api/product_version")
+    public long getProductVersion() {
+        return productRepositoryManager.getVersion();
     }
 
 

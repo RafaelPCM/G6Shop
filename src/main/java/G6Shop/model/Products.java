@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import org.springframework.lang.NonNull;
 
 @Entity
-public class Contact implements ModelWithDrawablePath {
+public class Products implements ModelWithDrawablePath {
 
     @Id
     @GeneratedValue
