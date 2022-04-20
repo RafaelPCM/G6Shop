@@ -14,7 +14,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.NonNull;
 
 @Entity
-public class Products implements ModelWithDrawablePath {
+public class Produto implements ModelWithDrawablePath {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class Products implements ModelWithDrawablePath {
     private long version;
 
     
-    public Products() {
+    public Produto() {
     }
 
     public int getId() {

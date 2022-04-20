@@ -27,13 +27,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import G6Shop.model.Contact;
 import G6Shop.model.Holiday;
 import G6Shop.model.ModelWithDrawablePath;
-import G6Shop.model.Products;
+import G6Shop.model.Produto;
 import G6Shop.model.User;
 import G6Shop.repository.UserRepository;
+import G6Shop.repositorymanager.ContactRepositoryManager;
 import G6Shop.repositorymanager.HolidayRepositoryManager;
-import G6Shop.repositorymanager.ProductsRepositoryManager;
+import G6Shop.repositorymanager.ProdutoRepositoryManager;
 
 
 
@@ -53,13 +55,14 @@ public class G6WebController {
   @Autowired
   private FileLocationService fileLocationService;
 
-
-
   @Autowired
-  ProductsRepositoryManager productsRepositoryManager;
+  private ProdutoRepositoryManager produtoRepositoryManager;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private ContactRepositoryManager contactRepositoryManager;
 
   enum Status {
     NOT_FOUND("notfound"), ALTERED("altered"), CREATED("created"), DELETED("deleted"),
@@ -82,7 +85,7 @@ public class G6WebController {
   enum Page {
     TAX("tax"), HOLIDAYS("holidays"), TRAIN_LINES("train_lines"), NOTIFICATIONS("notifications"), USERS("users"),
     PRODUCTS("products"), TIME("time"), CONTACTS("contacts"), TIMETABLEIMAGE("timetable_image"),
-    TRAIN_MAP_IMAGE("trainmap_image"), ALTERUSER("alteruser");
+    TRAIN_MAP_IMAGE("trainmap_image"), ALTERUSER("alteruser"), PRODUTO("produto");
 
     String name;
 
@@ -146,81 +149,81 @@ public class G6WebController {
   }
 
 
-  @GetMapping("/products")
-  public String products(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
-    List<Products> products = new ArrayList<>();
+  @GetMapping("/produto")
+  public String produto(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
+    List<Produto>produto = new ArrayList<>();
     User currentUser = getCurrentUser();
     if (currentUser.getRole() != null) {
-      Iterable<Products> iterable = productsRepositoryManager.findAll();
-      Iterator<Products> iterator = iterable.iterator();
+      Iterable<Produto> iterable = produtoRepositoryManager.findAll();
+      Iterator<Produto> iterator = iterable.iterator();
       while (iterator.hasNext()) {
-        Products s = iterator.next();
-        products.add(s);
+        Produto s = iterator.next();
+        produto.add(s);
       }
     }
-    model.addAttribute(Page.PRODUCTS.toString(), products);
+    model.addAttribute(Page.PRODUTO.toString(), produto);
     model.addAttribute(CURRENT_USER, currentUser);
     if (statusAttribute instanceof Status) {
       model.addAttribute(STATUS, statusAttribute.toString());
     }
 
-    return Page.PRODUCTS.toString();
+    return Page.PRODUTO.toString();
   }
 
   
-  @GetMapping("/alterproduct")
-  public String showAlterProductPage(Model model, RedirectAttributes attributes,
+  @GetMapping("/alterproduto")
+  public String showAlterProdutoPage(Model model, RedirectAttributes attributes,
       @RequestParam(value = "id", required = false) Integer id) {
-    Products product;
+    Produto produto;
     if (id != null) {
       model.addAttribute(NEW_ENTITY, false);
-      Optional<Products> optionalCurrentContact = productsRepositoryManager.findById(id);
+      Optional<Produto> optionalCurrentContact = produtoRepositoryManager.findById(id);
       if (optionalCurrentContact.isPresent()) {
-        product = optionalCurrentContact.get();
+        produto = optionalCurrentContact.get();
       } else {
-        product = new Products();
+        produto = new Produto();
       }
     } else {
       model.addAttribute(NEW_ENTITY, true);
-      product = new Products();
+      produto = new Produto();
     }
-    model.addAttribute("prod", product);
-    return "alterproduct";
+    model.addAttribute("prod", produto);
+    return "alterproduto";
   }
 
-  @PostMapping("/alterproduct")
+  @PostMapping("/alterproduto")
   @Transactional
-  public RedirectView alterProduct(RedirectAttributes attributes, @RequestParam("id") Integer id,
+  public RedirectView alterProduto(RedirectAttributes attributes, @RequestParam("id") Integer id,
       @RequestParam("name") String name,
       @RequestParam("size") String size,
       @RequestParam("price") Integer price
       ) {
-    Optional<Products> optionalCurrentProduct = productsRepositoryManager.findById(id);
+    Optional<Produto> optionalCurrentProduto = produtoRepositoryManager.findById(id);
 
-    if (optionalCurrentProduct.isPresent()) {
-      var currentProduct = optionalCurrentProduct.get();
-      currentProduct.setName(name);
-      currentProduct.setSize(size);
-      currentProduct.setPrice(price);
+    if (optionalCurrentProduto.isPresent()) {
+      var currentProduto = optionalCurrentProduto.get();
+      currentProduto.setName(name);
+      currentProduto.setSize(size);
+      currentProduto.setPrice(price);
 
-      productsRepositoryManager.save(currentProduct);
+      produtoRepositoryManager.save(currentProduto);
     } else {
-      var product = new Products();
-      product.setName(name);
-      product.setSize(size);
-      product.setPrice(price);
+      var produto = new Produto();
+      produto.setName(name);
+      produto.setSize(size);
+      produto.setPrice(price);
 
-      productsRepositoryManager.save(product);
+      produtoRepositoryManager.save(produto);
     }
     attributes.addFlashAttribute(STATUS, Status.ALTERED);
-    return new RedirectView(Page.PRODUCTS.toString());
+    return new RedirectView(Page.PRODUTO.toString());
   }
 
-  @GetMapping("/deleteproduct")
-  public String deleteProduct(RedirectAttributes attributes, @RequestParam("id") int id) {
-    productsRepositoryManager.deleteById(id);
+  @GetMapping("/deleteproduto")
+  public String deleteProduto(RedirectAttributes attributes, @RequestParam("id") int id) {
+    produtoRepositoryManager.deleteById(id);
     attributes.addFlashAttribute(STATUS, Status.DELETED);
-    return REDIRECT + Page.PRODUCTS.toString();
+    return REDIRECT + Page.PRODUTO.toString();
   }
   
 
@@ -433,5 +436,94 @@ public class G6WebController {
       modelWithDrawablePath.setDrawablePath("");
     }
   }
+
+
+
+
+  @GetMapping("/contacts")
+  public String contact(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
+    List<Contact> contacts = new ArrayList<>();
+    User currentUser = getCurrentUser();
+    if (currentUser.getRole() != null) {
+      Iterable<Contact> iterable = contactRepositoryManager.findAll();
+      Iterator<Contact> iterator = iterable.iterator();
+      while (iterator.hasNext()) {
+        Contact c = iterator.next();
+        contacts.add(c);
+      }
+    }
+    model.addAttribute(Page.CONTACTS.toString(), contacts);
+    model.addAttribute(CURRENT_USER, currentUser);
+    if (statusAttribute instanceof Status) {
+      model.addAttribute(STATUS, statusAttribute.toString());
+    }
+
+    return Page.CONTACTS.toString();
+  }
+
+
+  @GetMapping("/altercontact")
+  public String showAlterContactPage(Model model, RedirectAttributes attributes,
+      @RequestParam(value = "id", required = false) Integer id) {
+    Contact contact;
+    if (id != null) {
+      model.addAttribute(NEW_ENTITY, false);
+      Optional<Contact> optionalCurrentContact = contactRepositoryManager.findById(id);
+      if (optionalCurrentContact.isPresent()) {
+        contact = optionalCurrentContact.get();
+      } else {
+        contact = new Contact();
+      }
+    } else {
+      model.addAttribute(NEW_ENTITY, true);
+      contact = new Contact();
+    }
+    model.addAttribute("contact", contact);
+    return "altercontact";
+  }
+
+
+  @PostMapping("/altercontact")
+  @Transactional
+  public RedirectView altercontact(RedirectAttributes attributes, @RequestParam("id") Integer id,
+      @RequestParam("name") String name, @RequestParam("size") String size,
+      @RequestParam("price") Integer price,
+      @RequestParam(value = "no_image_checkbox", required = false) String noImageCheckBox,
+      @RequestParam(value = "file", required = false) MultipartFile file) throws IllegalStateException, IOException {
+
+    Optional<Contact> optionalCurrentContact = contactRepositoryManager.findById(id);
+
+    Contact contact;
+    if (optionalCurrentContact.isPresent()) {
+      contact = optionalCurrentContact.get();
+    } else {
+      contact = new Contact();
+    }
+    contact.setName(name);
+    contact.setSize(size);
+    contact.setPrice(price);
+    updateDrawablePath(contact, noImageCheckBox, file);
+
+    contactRepositoryManager.save(contact);
+
+    attributes.addFlashAttribute(STATUS, Status.ALTERED);
+    return new RedirectView(Page.CONTACTS.toString());
+  }
+
+  @GetMapping("/deletecontact")
+  public String deleteContact(@RequestParam("id") Integer id, RedirectAttributes attributes) {
+    try {
+      contactRepositoryManager.deleteById(id);
+      attributes.addFlashAttribute(STATUS, Status.DELETED);
+    } catch (Exception e) {
+      attributes.addFlashAttribute(STATUS, Status.NOT_FOUND);
+    }
+    return REDIRECT + Page.CONTACTS.toString();
+  }
+
+
+
+
+
 
 }

@@ -12,13 +12,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import G6Shop.model.Contact;
 import G6Shop.model.Holiday;
-import G6Shop.model.Products;
+import G6Shop.model.Produto;
 import G6Shop.model.Version;
 import G6Shop.model.Version.VersionName;
 import G6Shop.repository.VersionRepository;
+import G6Shop.repositorymanager.ContactRepositoryManager;
 import G6Shop.repositorymanager.HolidayRepositoryManager;
-import G6Shop.repositorymanager.ProductsRepositoryManager;
+import G6Shop.repositorymanager.ProdutoRepositoryManager;
 
 
 
@@ -31,10 +33,14 @@ public class G6AppController {
     private String appName;
 
     @Autowired
-    ProductsRepositoryManager productsRepositoryManager;
+    ProdutoRepositoryManager produtoRepositoryManager;
 
     @Autowired
     private HolidayRepositoryManager holidayRepositoryManager;
+
+    
+    @Autowired
+    private ContactRepositoryManager contactRepositoryManager;
 
     @Autowired
     ServletContext context;
@@ -43,11 +49,11 @@ public class G6AppController {
     VersionRepository versionsRepository;
 
 
-    @GetMapping(value = "/api/products")
-    public List<Products> getProducts() {
-        Iterable<Products> iterable = productsRepositoryManager.findAll();
-        Iterator<Products> iterator = iterable.iterator();
-        List<Products> result = new ArrayList<>();
+    @GetMapping(value = "/api/produto")
+    public List<Produto> getProduto() {
+        Iterable<Produto> iterable = produtoRepositoryManager.findAll();
+        Iterator<Produto> iterator = iterable.iterator();
+        List<Produto> result = new ArrayList<>();
         while (iterator.hasNext()) {
             result.add(iterator.next());
         }
@@ -72,8 +78,8 @@ public class G6AppController {
     }
 
     @GetMapping("/api/products_version")
-    public long getProductsVersion() {
-        return productsRepositoryManager.getVersion();
+    public long getProdutoVersion() {
+        return produtoRepositoryManager.getVersion();
     }
 
 
@@ -92,5 +98,26 @@ public class G6AppController {
         }
         return result;
     }
+
+
+    @GetMapping(value = "/api/contact")
+    public List<Contact> contactInJson() {
+        Iterable<Contact> iterable = contactRepositoryManager.findAll();
+        Iterator<Contact> iterator = iterable.iterator();
+        List<Contact> result = new ArrayList<>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+        return result;
+    }
+
+
+    @GetMapping("/api/contact_version")
+    public long getContactVersion() {
+        return contactRepositoryManager.getVersion();
+    }
+
+
+
 
 }

@@ -26,12 +26,12 @@
 
 	<div class="col-md-5  justify-content-center titleLike">
 
-		<form th:action="@{alterproduct}" th:object="${prod}" method="POST">
+		<form th:action="@{alterproduto}" th:object="${produto}" method="POST">
 
 			<div th:unless="${newEntity}" class="form-group row">
 				<label for="id" class="col-sm-3 col-form-label">Id: </label>
 				<div class="col-sm-9">
-					<p th:text="${prod.id}">
+					<p th:text="${produto.id}">
 				</div>
 			</div>
 

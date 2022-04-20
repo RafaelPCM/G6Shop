@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/fragments :: source-includes">
+    <div th:replace="fragments/fragments :: header"> </div>
+
+    <title>Produtos</title>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var contacts = /*[[${contacts}]]*/ 'contacts';
+        /*]]>*/
+        $(document).ready(function () {
+            var table = $('#contactTable').DataTable({
+                "data": contacts,
+                "sAjaxDataProp": "",
+                "oLanguage": oLanguage,
+                "pageLength": 50,
+                "createdRow": function (row, data, dataIndex) {
+                    if (dataIndex % 2 == 0) {
+                        console.log(dataIndex);
+                        $(row).addClass('table-secondary');
+                    } else {
+                        $(row).addClass('table-active');
+                    }
+                },
+                "aoColumns": [
+                    { "mData": "id" },
+                    {
+                        "mRender": function (data, type, full) {
+                            return '<img style="max-height:50px;max-width:50px;" src="/images/repo/' + full["drawablePath"] + '" alt="Sem logo" />';
+                        }, "orderable": false
+                    },
+                    { "mData": "name" },
+                    { "mData": "size" },
+                    { "mData": "price" },
+                    
+                    {
+                        "mRender": function (data, type, full) {
+                            return "<a class='btn btn-outline-warning btn-sm' type='button' href='/altercontact?id=" + full["id"] + "'>Alterar</a>";
+                        }, "orderable": false
+                    },
+                    {
+                        "mRender": function (data, type, full) {
+                            return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deletecontact?id=" + full["id"] + "'>Excluir</button>";
+                        }, "orderable": false
+                    }
+                ]
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <td th:switch="${status}">
+
+        <span th:case="deleted">
+
+            <div id="moo"
+                class="alert alert-success alert-dismissible show fade"
+                role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert"
+                    aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                Produto deletado com sucesso!
+            </div>
+
+        </span>
+
+        <span th:case="altered">
+
+            <div id="moo"
+                class="alert alert-success alert-dismissible show fade"
+                role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert"
+                    aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                Produto alterado com sucesso!
+            </div>
+
+        </span>
+
+        <span th:case="created">
+
+            <div id="moo"
+                class="alert alert-success alert-dismissible show fade"
+                role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert"
+                    aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                Produto criado com sucesso!
+            </div>
+
+        </span>
+
+        <span th:case="notfound">
+
+            <div id="moo" class="alert alert-danger alert-dismissible show fade"
+                role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert"
+                    aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                Produto não encontrado
+            </div>
+
+        </span>
+
+    </td>
+
+    <div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
+            <h2>Produtos</h2>
+        </label><button onclick="location.href='altercontact'"
+            class="btn btn-primary float-right btn-sm button-new">Adicionar
+            Produto</button></div>
+
+    <div class="d-flex justify-content-center">
+        <table
+            class="table table-bordered table-hover table-fit2 table-sm text-center align-middle"
+            id="contactTable">
+            <caption>Lista de Produtos</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Tamanho</th>
+                    <th scope="col">Preço</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+</body>
+
+<div th:replace="fragments/fragments :: footer"> </div>
+
+</html>

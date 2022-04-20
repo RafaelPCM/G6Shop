@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/fragments :: source-includes">
+	<div th:replace="fragments/fragments :: header"> </div>
+
+	<title th:if="${newEntity}">
+		Novo contato
+	</title>
+	<title th:unless="${newEntity}">
+		Alterar contato
+	</title>
+
+	<script th:replace="fragments/fragments :: clearInputImg"></script>
+
+	<script th:replace="fragments/fragments :: removeImgButton"></script>
+</head>
+
+<body>
+	<div class="pb-2 mt-4 mb-4 border-bottom title">
+		<label class="lb-lg">
+			<h2 th:if="${newEntity}">
+				Novo Produto
+			</h2>
+			<h2 th:unless="${newEntity}">
+				Alterar Produto
+			</h2>
+		</label>
+	</div>
+
+
+	<div class="col-md-6 justify-content-center titleLike">
+
+		<form th:action="@{altercontact}" th:object="${contact}" method="POST"
+			enctype="multipart/form-data">
+
+			<div th:unless="${newEntity}" class="form-group row">
+				<label for="id" class="col-sm-3">Id: </label>
+				<div class="col-sm-9">
+					<p th:text="${contact.id}" id="id">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="name" class=" col-sm-3">Nome do Produto: <span class="mandatory">*</span>
+				</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control validate"
+						th:field="*{name}" id="name" name="name" required aria-required="true">
+					<input type="hidden" th:field="*{id}" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3">Tamanho: <span class="mandatory">*</span>
+				</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control validate"
+						th:field="*{size}" id="size" name="size"
+						required aria-required="true">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3">Preco: <span class="mandatory">*</span>
+				</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control validate"
+						th:field="*{price}" id="price" name="price"
+						required aria-required="true">
+				</div>
+			</div>
+
+			
+			<div th:unless="${newEntity}" class="form-group row">
+				<label for="id" class="col-sm-3 col-form-label" >Produto:
+				</label>
+				<div class="col-sm-9"  >
+					<img class="current_image" th:src="@{/images/repo/{image}(image=${contact.drawablePath})}"
+						alt="imagem do contato" />
+				</div>
+			</div>
+
+			<div th:replace="fragments/fragments :: inputImgPreviewRemove">
+			</div>
+
+			<div th:replace="fragments/fragments :: submitAndCancelButtons">
+			</div>
+
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+		</form>
+	</div>
+</body>
+
+<div th:replace="fragments/fragments :: footer"> </div>
+
+</html>
