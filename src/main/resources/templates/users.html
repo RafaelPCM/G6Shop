@@ -142,7 +142,7 @@
     <div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
             <h2>Usuários</h2>
         </label>
-            <button th:if='${currentUser.role.equals("ADMIN")}' onclick="location.href='createuser';" class="btn btn-primary float-right btn-sm button-new">Criar
+            <button th:if='${currentUser.role.equals("ADMIN")}' onclick="location.href='createuser';" class="btn btn-dark float-right btn-sm button-new">Criar
             usuário</button>
         </div>
 
@@ -150,7 +150,7 @@
         <table id="usersTable"
             class="table table-striped table-bordered table-hover table-fit2 table-sm text-center align-middle">
             <caption>Tabela de usuários</caption>
-            <thead>
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Nome</th>

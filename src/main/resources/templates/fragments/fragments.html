@@ -133,10 +133,14 @@
 
 <header th:fragment="header">
 
-    <nav class="navbar navbar-expand-sm bg-light navbar-light text-center">
+    <nav navbar-dark class="navbar navbar-expand-sm navbar-dark border-bottom shadow-sm" style="background-color:#202022">
         <!-- Brand/logo -->
-        <a class="navbar-brand" href="/"> <img src="/images/favicon.ico"
+            <a class="navbar-brand" href="/"> <img src="/images/favicon.ico"
                 alt="logo" id="favicon" style="width: 40px;">
+        </a>
+        <!-- TODO caso queira adicionar uma homepage so alterar o href -->
+        <a class="navbar-brand" href="/products">
+            <strong>Loja Online G6</strong>
         </a>
         <ul class="navbar-nav">
 
@@ -154,6 +158,8 @@
 
         </ul>
 
+        
+
         <script>
             "use strict";
             var path = window.location.pathname;
@@ -166,7 +172,8 @@
         <ul class="navbar-nav ml-auto text-center">
             <li class="nav-item mr-2 mt-1">
                 <span sec:authorize="isAuthenticated()">
-                    Logado como: <span sec:authentication="name"></span></span>
+                    <!-- TODO ajeitar a cor disso -->
+                    Logado como: <span sec:authentication="name"  style="background-color:#ffffff"></span></span>
             </li>
             <li class="nav-item">
                 <form th:action="@{/logout}" method="post">
