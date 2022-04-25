@@ -133,7 +133,7 @@
 
 <header th:fragment="header">
 
-    <nav navbar-dark class="navbar navbar-expand-sm navbar-dark border-bottom shadow-sm" style="background-color:#202022">
+    <nav navbar-dark class="navbar navbar-expand-sm navbar-dark border-bottom shadow-sm" style="background-color:#000000">
         <!-- Brand/logo -->
             <a class="navbar-brand" href="/"> <img src="/images/favicon.ico"
                 alt="logo" id="favicon" style="width: 40px;">
@@ -171,9 +171,9 @@
         <!-- Logout -->
         <ul class="navbar-nav ml-auto text-center">
             <li class="nav-item mr-2 mt-1">
-                <span sec:authorize="isAuthenticated()">
+                <span sec:authorize="isAuthenticated()" style="color:white">
                     <!-- TODO ajeitar a cor disso -->
-                    Logado como: <span sec:authentication="name"  style="background-color:#ffffff"></span></span>
+                    Logado como: <span sec:authentication="name" style="color:rgb(255, 255, 255)"></span></span>
             </li>
             <li class="nav-item">
                 <form th:action="@{/logout}" method="post">
