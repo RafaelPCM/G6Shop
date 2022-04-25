@@ -36,7 +36,7 @@
                     
                     {
                         "mRender": function (data, type, full) {
-                            return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
+                            return "<a class='btn btn-outline-warning btn-sm' type='button' th:if=${currentUser.role.equals('ADMIN')}' href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
                         }, "orderable": false
                     },
                     {
@@ -110,7 +110,7 @@
 
     <div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
             <h2>Produtos</h2>
-        </label><button onclick="location.href='alterproduct'"
+        </label><button th:if='${currentUser.role.equals("ADMIN")}' onclick="location.href='alterproduct'"
             class="btn btn-dark float-right btn-sm button-new">Adicionar
             Produto</button></div>
 
