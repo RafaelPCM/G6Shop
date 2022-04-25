@@ -13,7 +13,7 @@
 <br>
 <div class="container">
 
-	<body>
+	<body style="background-color: black;">
 		<div class="d-flex justify-content-center vertical-center">
 			<article class="card-body col-md-5 text-center ">
 				<div class="marginBottom">
@@ -21,12 +21,12 @@
 						style="width: 170px;">
 				</div>
 				<br>
-				<h5 class="card-title text-center mb-4 mt-1 ">Acessar a G6Shop</h5>
+				<h5 class="card-title text-center mb-4 mt-1 " style="color:white">Acessar a G6Shop</h5>
 
-				<div th:if="${param.error}">
+				<div th:if="${param.error}" style="color:white">
 					Nome ou senha inválida.
 				</div>
-				<div th:if="${param.logout}">
+				<div th:if="${param.logout}" style="color:white">
 					Você saiu do sistema.
 				</div>
 
