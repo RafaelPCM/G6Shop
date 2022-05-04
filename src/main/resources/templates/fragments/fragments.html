@@ -140,13 +140,19 @@
         </a>
         
         <!-- TODO caso queira adicionar uma homepage so alterar o href -->
-        <a class="navbar-brand" href="/products">
+        <a class="navbar-brand" style="color:rgb(255, 255, 255)">
             <strong>Loja Online G6</strong>
         </a>
 
         <ul class="navbar-nav">
 
-            <li id="products" class="nav-item">
+            <li sec:authorize="!isAuthenticated()" id="products" class="nav-item">
+                <a class="nav-link" href="/login">
+                    Produtos
+                </a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" id="products" class="nav-item">
                 <a class="nav-link" href="/products">
                     Produtos
                 </a>

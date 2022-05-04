@@ -1,0 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    min-width: 420px;
+}
+
+.login-form{
+    margin: 20px 20px 20px 20px;
+    
+}
+
+.imgG6{
+    margin-bottom: 100px;
+}
+.corpo{
+    margin-top: 100px;
+}
+
+.coluna-2{  
+    height: 400px;
+}
+
+@media screen and (max-width: 576px){
+    .corpo{
+        margin-top: 10px;
+    }
+    .imgG6{
+        margin-bottom: 10px;
+    }
+}
+
+.wrapper{
+    min-height: 100vh;
+}
+

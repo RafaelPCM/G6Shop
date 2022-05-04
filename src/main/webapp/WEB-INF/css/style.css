@@ -1,0 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    min-width: 500px;
+}
+
+h1{
+    background-color: #f36700;
+}
+
+.wrapper{
+    min-height: 100vh;
+}

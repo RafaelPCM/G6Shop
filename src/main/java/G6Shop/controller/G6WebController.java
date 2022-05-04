@@ -69,7 +69,7 @@ public class G6WebController {
 
   enum Page {
     PRODUCTS("products"),USERS("users"), ALTERUSER("alteruser"), PRODUTO("produto"),
-    LOGIN("login");
+    LOGIN("login"), HOME("home");
 
     String name;
 
@@ -93,7 +93,12 @@ public class G6WebController {
 
   @GetMapping("/")
   public String index(Model model) {
-    return "redirect:products";
+    return "redirect:home";
+  }
+
+  @GetMapping("/home")
+  public String home(Model model) throws IOException {
+    return "home";
   }
 
   @GetMapping("/login")
@@ -302,7 +307,7 @@ public class G6WebController {
   public String deleteUser(RedirectAttributes attributes, @RequestParam("id") int id) {
     userRepository.deleteById(id);
     attributes.addFlashAttribute(STATUS, Status.DELETED);
-    return REDIRECT + Page.USERS.toString();
+    return REDIRECT + Page.HOME.toString();
   }
 
 
@@ -310,17 +315,17 @@ public class G6WebController {
   @GetMapping("/products")
   public String products(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
     List<Products> products = new ArrayList<>();
-    // User currentUser = getCurrentUser();
-    // if (currentUser.getRole() != null) {
+    User currentUser = getCurrentUser();
+    if (currentUser.getRole() != null) {
       Iterable<Products> iterable = productRepositoryManager.findAll();
       Iterator<Products> iterator = iterable.iterator();
       while (iterator.hasNext()) {
         Products prod = iterator.next();
         products.add(prod);
       }
-    // }
+    }
     model.addAttribute(Page.PRODUCTS.toString(), products);
-    // model.addAttribute(CURRENT_USER, currentUser);
+    model.addAttribute(CURRENT_USER, currentUser);
     if (statusAttribute instanceof Status) {
       model.addAttribute(STATUS, statusAttribute.toString());
     }
