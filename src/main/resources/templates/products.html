@@ -36,9 +36,13 @@
                     
                     {
                         "mRender": function (data, type, full) {
-                            return "<a class='btn btn-outline-warning btn-sm' type='button' th:if=${currentUser.role.equals('ADMIN')}' href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
+                            return "<a class='btn btn-outline-warning btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
                         }, "orderable": false
-                    },
+                    }
+                    // TODO remover botoes de adicionar, alterar e remover para usuarios comuns
+                    // th:if=${currentUser.role.equals('ADMIN')}'
+                    // sec:authorize="isAuthenticated()"
+                    ,
                     {
                         "mRender": function (data, type, full) {
                             return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteproduct?id=" + full["id"] + "'>Excluir</button>";
@@ -110,7 +114,7 @@
 
     <div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
             <h2>Produtos</h2>
-        </label><button th:if='${currentUser.role.equals("ADMIN")}' onclick="location.href='alterproduct'"
+        </label><button sec:authorize="isAuthenticated()" onclick="location.href='alterproduct'"
             class="btn btn-dark float-right btn-sm button-new">Adicionar
             Produto</button></div>
 

@@ -68,7 +68,8 @@ public class G6WebController {
   }
 
   enum Page {
-    PRODUCTS("products"),USERS("users"), ALTERUSER("alteruser"), PRODUTO("produto");
+    PRODUCTS("products"),USERS("users"), ALTERUSER("alteruser"), PRODUTO("produto"),
+    LOGIN("login");
 
     String name;
 
@@ -114,21 +115,23 @@ public class G6WebController {
     }
   }
 
+  // TODO fazer com que assim que o usuario crie sua conta, logue automaticamente
+  //      e possa ver a pagina com seu usuario para poder alterar caso queira
   @GetMapping("/users")
   public String users(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
     List<User> users = new ArrayList<>();
     User currentUser = getCurrentUser();
-    if (currentUser.getRole().equals("ADMIN")) {
-      Iterable<User> iterable = userRepository.findAll();
-      Iterator<User> iterator = iterable.iterator();
-      while (iterator.hasNext()) {
-
-        User u = iterator.next();
-        users.add(u);
-      }
-    } else {
-      users.add(currentUser);
-    }
+      if (currentUser.getRole().equals("ADMIN")) {
+        Iterable<User> iterable = userRepository.findAll();
+        Iterator<User> iterator = iterable.iterator();
+        while (iterator.hasNext()) {
+  
+          User u = iterator.next();
+          users.add(u);
+        }
+      } else {
+          users.add(currentUser);
+        }
     model.addAttribute(Page.USERS.toString(), users);
     model.addAttribute(CURRENT_USER, currentUser);
     if (statusAttribute instanceof Status) {
@@ -218,7 +221,7 @@ public class G6WebController {
     return new RedirectView(Page.USERS.toString());
   }
 
-  @GetMapping("/createuser")
+  @GetMapping("/admincreateuser")
   public String showCreateUser(Model model, RedirectAttributes attributes,
       @RequestParam(value = "id", required = false) Integer id) {
     User user;
@@ -236,10 +239,10 @@ public class G6WebController {
     }
 
     model.addAttribute("us", user);
-    return "createuser";
+    return "admincreateuser";
   }
 
-  @PostMapping("/createuser")
+  @PostMapping("/admincreateuser")
   @Transactional
   public String createUser(RedirectAttributes attributes, @RequestParam("username") String username,
       @RequestParam("password") String password, @RequestParam("registrationNumber") String registrationNumber,
@@ -257,6 +260,44 @@ public class G6WebController {
     return REDIRECT + Page.USERS.toString();
   }
 
+  @GetMapping("/usercreateuser")
+  public String showUserCreateUser(Model model, RedirectAttributes attributes,
+      @RequestParam(value = "id", required = false) Integer id) {
+    User user;
+    if (id != null) {
+      model.addAttribute(NEW_ENTITY, false);
+      Optional<User> optionalCurrentUser = userRepository.findById(id);
+      if (optionalCurrentUser.isPresent()) {
+        user = optionalCurrentUser.get();
+      } else {
+        user = new User();
+      }
+    } else {
+      model.addAttribute(NEW_ENTITY, true);
+      user = new User();
+    }
+
+    model.addAttribute("us", user);
+    return "usercreateuser";
+  }
+
+  @PostMapping("/usercreateuser")
+  @Transactional
+  public String userCreateUser(RedirectAttributes attributes, @RequestParam("username") String username,
+      @RequestParam("password") String password, @RequestParam("registrationNumber") String registrationNumber,
+      @RequestParam("role") String role) {
+    var user = new User();
+
+    user.setUsername(username);
+    user.setPassword(passwordEncoder.encode(password));
+    user.setRegistrationNumber(registrationNumber);
+    user.setEnabled(true);
+    user.setRole(role);
+    userRepository.save(user);
+
+    return REDIRECT + Page.LOGIN.toString();
+  }
+
   @GetMapping("/deleteuser")
   public String deleteUser(RedirectAttributes attributes, @RequestParam("id") int id) {
     userRepository.deleteById(id);
@@ -265,21 +306,21 @@ public class G6WebController {
   }
 
 
-
+// TODO Conseguir visualizar a tabela mesmo sem estar logado ou diferenciar se o usuario esta logado ou nao
   @GetMapping("/products")
   public String products(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
     List<Products> products = new ArrayList<>();
-    User currentUser = getCurrentUser();
-    if (currentUser.getRole() != null) {
+    // User currentUser = getCurrentUser();
+    // if (currentUser.getRole() != null) {
       Iterable<Products> iterable = productRepositoryManager.findAll();
       Iterator<Products> iterator = iterable.iterator();
       while (iterator.hasNext()) {
         Products prod = iterator.next();
         products.add(prod);
       }
-    }
+    // }
     model.addAttribute(Page.PRODUCTS.toString(), products);
-    model.addAttribute(CURRENT_USER, currentUser);
+    // model.addAttribute(CURRENT_USER, currentUser);
     if (statusAttribute instanceof Status) {
       model.addAttribute(STATUS, statusAttribute.toString());
     }

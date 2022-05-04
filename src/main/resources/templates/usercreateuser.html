@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/fragments :: source-includes">
+	<div th:replace="fragments/fragments :: header"> </div>
+	
+	<title>Criar usuário</title>
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+				<div class="pb-2 mt-4 mb-4 border-bottom title">
+					<label class="lb-lg">
+						<h2>Criar usuário</h2>
+					</label>
+				</div>
+
+				<div class="justify-content-center titleLike">
+
+
+					<form th:action="@{usercreateuser}" th:object="${us}"
+						method="POST">
+
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Nome: <span class="mandatory">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control validate"
+									th:field="*{username}" id="username"
+									name="username" required aria-required="true">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label
+								class="col-sm-3 col-form-label">Matrícula:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control validate"
+									th:field="*{registrationNumber}"
+									id="registrationNumber"
+									name="registrationNumber">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Senha: <span class="mandatory">*</span></label>
+							<div class="col-sm-9">
+								<input type="password"
+									class="form-control validate"
+									th:field="*{password}" id="password"
+									name="password"
+									placeholder="Insira a nova senha" required aria-required="true">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="staticEmail"
+								class="col-sm-3 col-form-label">Confirme a
+								senha: <span class="mandatory">*</span></label>
+							<div class="col-sm-9">
+								<input type="password"
+									class="form-control validate"
+									id="confirm_password"
+									placeholder="Confirm Password" required aria-required="true">
+								<input type="hidden" th:field="*{id}" />
+							</div>
+						</div>
+
+						<script>
+							var password = document.getElementById("password")
+								, confirm_password = document.getElementById("confirm_password");
+
+							function validatePassword() {
+								if (password.value != confirm_password.value) {
+									confirm_password.setCustomValidity("Passwords Don't Match");
+								} else {
+									confirm_password.setCustomValidity('');
+								}
+							}
+
+							password.onchange = validatePassword;
+							confirm_password.onkeyup = validatePassword;
+						</script>
+
+						<div class="form-group row">
+							<label for="inputPassword"
+								class="col-sm-3 col-form-label">Permissão:</label>
+							<div class="col-sm-9">
+								<select  class="form-control" th:field="*{role}" id="role" name="role">
+									<option value="USER">Usuário</option>
+								</select>
+							</div>
+						</div>
+
+						<div th:replace="fragments/fragments :: submitAndCancelButtons"></div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<div th:replace="fragments/fragments :: footer"> </div>
+
+</html>
