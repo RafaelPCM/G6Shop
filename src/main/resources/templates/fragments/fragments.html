@@ -138,19 +138,27 @@
             <a class="navbar-brand" href="/"> <img src="/images/favicon.ico"
                 alt="logo" id="favicon" style="width: 40px;">
         </a>
+        
         <!-- TODO caso queira adicionar uma homepage so alterar o href -->
-        <a class="navbar-brand" href="/products">
+        <a class="navbar-brand" style="color:rgb(255, 255, 255)">
             <strong>Loja Online G6</strong>
         </a>
+
         <ul class="navbar-nav">
 
-            <li id="products" class="nav-item">
+            <li sec:authorize="!isAuthenticated()" id="products" class="nav-item">
+                <a class="nav-link" href="/login">
+                    Produtos
+                </a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" id="products" class="nav-item">
                 <a class="nav-link" href="/products">
                     Produtos
                 </a>
             </li>
 
-            <li id="users" class="nav-item">
+            <li sec:authorize="isAuthenticated()" id="users" class="nav-item">
                 <a class="nav-link" href="/users">
                     Usuários
                 </a>
@@ -176,9 +184,25 @@
                     Logado como: <span sec:authentication="name" style="color:rgb(255, 255, 255)"></span></span>
             </li>
             <li class="nav-item">
-                <form th:action="@{/logout}" method="post">
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                    <!-- TODO fazer com que a pagina de Logout redirecione para /products, porem sem usuario -->
                     <input class="btn btn-info btn-sm" type="submit"
-                        value="Sair" />
+                        value="Sair" onclick="location.href='/products'"/>
+                </form>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto text-center">
+            <li class="nav-item">
+                <form sec:authorize="!isAuthenticated()" th:action="@{/login}" method="GET">
+                    <input class="btn btn-info btn-sm" type="submit"
+                        value="Logar" />
+                </form>
+            </li>
+            <li class="nav-item">
+                <form sec:authorize="!isAuthenticated()" th:action="@{/usercreateuser}" method="GET">
+                    <input class="btn btn-info btn-sm" type="submit"
+                        value="Criar Conta" />
                 </form>
             </li>
         </ul>

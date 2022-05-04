@@ -1,6 +1,5 @@
 package G6Shop.model;
 
-// TODO testar essa classe
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
