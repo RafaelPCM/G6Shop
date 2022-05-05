@@ -6,7 +6,8 @@
 
     <title>Produtos</title>
 
-    <!-- <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+    <!-- TODO entender pq quando é USER ele retorna certo, mas quando é ADMIN ele nao carrega os dados da tabela -->
+    <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
         /*<![CDATA[*/
         var users = /*[[${users}]]*/ 'users';
         /*]]>*/
@@ -15,36 +16,45 @@
             if (user["ADMIN"]) {
                 return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterproduct?id=" + full["id"] + "'>Alterar</a>"
             } else {
-                return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterproduct?id=" + full["id"] + "'>Alterar???</a>"
+                return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterproduct?id=" + full["id"] + "'>Alterar</a>"
             }
         }
+
+    </script>
+
+    <script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+        function alterProductButton(user) {
+            if (user["ADMIN"]) {
+                return "a"
+            } else {
+                return 'b';
+            }
+        }
+    </script>
+
+    <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+        /*<![CDATA[*/
+        var users = /*[[${users}]]*/ 'users';
+        /*]]>*/
 
         function deleteProductButton(user) {
             if (user["ADMIN"]) {
                 return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>Excluir</a>";
             } else {
-                return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>excluir??</a>";
+                return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>Excluir</a>";
             }
         }
     </script>
-    
-    <script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
-        function alterProductButton(user) {
-            if (user["enabled"]) {
-                return 'Ativo';
-            } else {
-                return 'Inativo';
-            }
-        }
 
+    <script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
         function deleteProductButton(user) {
-            if (user["enabled"]) {
-                return 'Ativo';
+            if (user["ADMIN"]) {
+                return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>Excluir</a>";
             } else {
-                return 'Inativo';
+                return 'b';
             }
         }
-    </script> -->
+    </script>
 
 
     <script th:inline="javascript">
@@ -75,11 +85,11 @@
                     { "mData": "name" },
                     { "mData": "size" },
                     { "mData": "price" },
-                    
+
                     {
                         "mRender": function (data, type, full) {
-                            return "<a class='btn btn-outline-warning btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
-                            // return alterProductButton(full);
+                            // return "<a class='btn btn-outline-warning btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
+                            return alterProductButton(full);
                         }, "orderable": false
                     }
                     // TODO remover botoes de adicionar, alterar e remover para usuarios comuns
@@ -89,8 +99,8 @@
                     ,
                     {
                         "mRender": function (data, type, full) {
-                            return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteproduct?id=" + full["id"] + "'>Excluir</button>";
-                            // return deleteProductButton(full);
+                            // return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteproduct?id=" + full["id"] + "'>Excluir</button>";
+                            return deleteProductButton(full);
                         }, "orderable": false
                     }
                 ]
@@ -106,11 +116,9 @@
 
         <span th:case="deleted">
 
-            <div id="moo"
-                class="alert alert-success alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
+            <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
                 </button>
                 Produto deletado com sucesso!
             </div>
@@ -119,11 +127,9 @@
 
         <span th:case="altered">
 
-            <div id="moo"
-                class="alert alert-success alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
+            <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
                 </button>
                 Produto alterado com sucesso!
             </div>
@@ -132,11 +138,9 @@
 
         <span th:case="created">
 
-            <div id="moo"
-                class="alert alert-success alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
+            <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
                 </button>
                 Produto criado com sucesso!
             </div>
@@ -145,10 +149,9 @@
 
         <span th:case="notfound">
 
-            <div id="moo" class="alert alert-danger alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
+            <div id="moo" class="alert alert-danger alert-dismissible show fade" role="alert" auto-close="4000">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
                 </button>
                 Produto não encontrado
             </div>
@@ -159,14 +162,12 @@
 
     <div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
             <h2>Produtos</h2>
-        </label><button sec:authorize="isAuthenticated()" th:if='${currentUser.role.equals("ADMIN")}' onclick="location.href='alterproduct'"
-            class="btn btn-dark float-right btn-sm button-new">Adicionar
+        </label><button sec:authorize="isAuthenticated()" th:if='${currentUser.role.equals("ADMIN")}'
+            onclick="location.href='alterproduct'" class="btn btn-dark float-right btn-sm button-new">Adicionar
             Produto</button></div>
 
     <div class="d-flex justify-content-center">
-        <table
-            class="table table-bordered table-hover table-fit2 table-sm text-center align-middle"
-            id="productTable">
+        <table class="table table-bordered table-hover table-fit2 table-sm text-center align-middle" id="productTable">
             <caption>Lista de Produtos</caption>
             <thead class="thead-dark">
                 <tr>
