@@ -17,65 +17,64 @@
 </head>
 
 <body>
-	<div class="pb-2 mt-4 mb-4 border-bottom title">
-		<label class="lb-lg">
-			<h2 th:if="${newEntity}">
-				Novo Produto
-			</h2>
-			<h2 th:unless="${newEntity}">
-				Alterar Produto
-			</h2>
-		</label>
+	<div class="container">
+		<div class="pb-2 mt-4 mb-4 border-bottom title">
+			<label class="lb-lg">
+				<h2 th:if="${newEntity}">
+					Novo Produto
+				</h2>
+				<h2 th:unless="${newEntity}">
+					Alterar Produto
+				</h2>
+			</label>
+		</div>
 	</div>
 
-
+	<div class="container">
 	<div class="col-md-6 justify-content-center titleLike">
 
-		<form th:action="@{alterproduct}" th:object="${product}" method="POST"
-			enctype="multipart/form-data">
+		<form th:action="@{alterproduct}" th:object="${product}" method="POST" enctype="multipart/form-data">
 
 			<div th:unless="${newEntity}" class="form-group row">
-				<label for="id" class="col-sm-3">Id: </label>
-				<div class="col-sm-9">
+				<label for="id" class="col-md-6">Id: </label>
+				<div class="col-md-6">
 					<p th:text="${product.id}" id="id">
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label for="name" class=" col-sm-3">Nome do Produto: <span class="mandatory">*</span>
+				<label for="name" class=" col-md-6">Nome do Produto: <span class="mandatory">*</span>
 				</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control validate"
-						th:field="*{name}" id="name" name="name" required aria-required="true">
+				<div class="col-md-6">
+					<input type="text" class="form-control validate" th:field="*{name}" id="name" name="name" required
+						aria-required="true">
 					<input type="hidden" th:field="*{id}" />
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label class="col-sm-3">Tamanho: <span class="mandatory">*</span>
+				<label class="col-md-6">Tamanho: <span class="mandatory">*</span>
 				</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control validate"
-						th:field="*{size}" id="size" name="size"
-						required aria-required="true">
+				<div class="col-md-6">
+					<input type="text" class="form-control validate" th:field="*{size}" id="size" name="size" required
+						aria-required="true">
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label class="col-sm-3">Preco: <span class="mandatory">*</span>
+				<label class="col-md-6">Preco: <span class="mandatory">*</span>
 				</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control validate"
-						th:field="*{price}" id="price" name="price"
+				<div class="col-md-6">
+					<input type="text" class="form-control validate" th:field="*{price}" id="price" name="price"
 						required aria-required="true">
 				</div>
 			</div>
 
-			
+
 			<div th:unless="${newEntity}" class="form-group row">
-				<label for="id" class="col-sm-3 col-form-label" >Produto:
+				<label for="id" class="col-md-2 col-form-label">Produto:
 				</label>
-				<div class="col-sm-9"  >
+				<div class="col-md-6">
 					<img class="current_image" th:src="@{/images/repo/{image}(image=${product.drawablePath})}"
 						alt="imagem do produto" />
 				</div>
@@ -87,8 +86,8 @@
 			<div th:replace="fragments/fragments :: submitAndCancelButtons">
 			</div>
 
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" />
+		</div>
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
 </body>

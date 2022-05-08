@@ -3,9 +3,15 @@
 
 <head th:include="fragments/fragments :: source-includes">
     <div th:replace="fragments/fragments :: header"> </div>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
 
     <title>Produtos</title>
 
+    <!-- TODO entender pq quando é USER ele retorna certo, mas quando é ADMIN ele nao carrega os dados da tabela -->
+    <!-- TODO DEPRECATED - Esse codigo ta aqui apenas pra estudar o uso do th:if e th:unless com ADMIN e USER -->
     <!-- <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
         /*<![CDATA[*/
         var users = /*[[${users}]]*/ 'users';
@@ -15,39 +21,48 @@
             if (user["ADMIN"]) {
                 return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterproduct?id=" + full["id"] + "'>Alterar</a>"
             } else {
-                return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterproduct?id=" + full["id"] + "'>Alterar???</a>"
+                return "<a class='btn btn-outline-warning btn-sm' type='button' href='/alterproduct?id=" + full["id"] + "'>Alterar</a>"
             }
         }
+
+    </script>
+
+    <script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+        function alterProductButton(user) {
+            if (user["ADMIN"]) {
+                return "a"
+            } else {
+                return 'b';
+            }
+        }
+    </script>
+
+    <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+        /*<![CDATA[*/
+        var users = /*[[${users}]]*/ 'users';
+        /*]]>*/
 
         function deleteProductButton(user) {
             if (user["ADMIN"]) {
                 return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>Excluir</a>";
             } else {
-                return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>excluir??</a>";
+                return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>Excluir</a>";
             }
         }
     </script>
-    
-    <script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
-        function alterProductButton(user) {
-            if (user["enabled"]) {
-                return 'Ativo';
-            } else {
-                return 'Inativo';
-            }
-        }
 
+    <script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
         function deleteProductButton(user) {
-            if (user["enabled"]) {
-                return 'Ativo';
+            if (user["ADMIN"]) {
+                return "<a class='btn btn-outline-danger btn-sm' type='button' th:if='${currentUser.role.equals('ADMIN')}' href='/deleteproduct?id=" + full["id"] + "'>Excluir</a>";
             } else {
-                return 'Inativo';
+                return 'b';
             }
         }
     </script> -->
 
 
-    <script th:inline="javascript">
+    <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
         /*<![CDATA[*/
         var products = /*[[${products}]]*/ 'products';
         /*]]>*/
@@ -75,7 +90,7 @@
                     { "mData": "name" },
                     { "mData": "size" },
                     { "mData": "price" },
-                    
+
                     {
                         "mRender": function (data, type, full) {
                             return "<a class='btn btn-outline-warning btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
@@ -98,89 +113,142 @@
         });
     </script>
 
+<script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+    /*<![CDATA[*/
+    var products = /*[[${products}]]*/ 'products';
+    /*]]>*/
+    $(document).ready(function () {
+        var table = $('#productTable').DataTable({
+            "data": products,
+            "sAjaxDataProp": "",
+            "oLanguage": oLanguage,
+            "pageLength": 50,
+            "createdRow": function (row, data, dataIndex) {
+                if (dataIndex % 2 == 0) {
+                    console.log(dataIndex);
+                    $(row).addClass('table-secondary');
+                } else {
+                    $(row).addClass('table-active');
+                }
+            },
+            "aoColumns": [
+                { "mData": "id" },
+                {
+                    "mRender": function (data, type, full) {
+                        return '<img style="max-height:50px;max-width:50px;" src="/images/repo/' + full["drawablePath"] + '" alt="Sem logo" />';
+                    }, "orderable": false
+                },
+                { "mData": "name" },
+                { "mData": "size" },
+                { "mData": "price" },
+
+                {
+                    "mRender": function (data, type, full) {
+                        return "";
+                    }, "orderable": false
+                },
+                {
+                    "mRender": function (data, type, full) {
+                        return "<a class='btn btn-outline-danger btn-sm' type='button' href='/buyproduct?id=" + full["id"] + "'>Comprar</button>";
+                    }, "orderable": false
+                }
+            ]
+        });
+    });
+</script>
+
 </head>
 
 <body>
+    <div class="d-flex flex-column wrapper">
 
-    <td th:switch="${status}">
+        <td th:switch="${status}">
 
-        <span th:case="deleted">
+            <span th:case="deleted">
 
-            <div id="moo"
-                class="alert alert-success alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                Produto deletado com sucesso!
+                <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto deletado com sucesso!
+                </div>
+
+            </span>
+
+            <span th:case="altered">
+
+                <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto alterado com sucesso!
+                </div>
+
+            </span>
+
+            <span th:case="created">
+
+                <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto criado com sucesso!
+                </div>
+
+            </span>
+
+            <span th:case="notfound">
+
+                <div id="moo" class="alert alert-danger alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto não encontrado
+                </div>
+
+            </span>
+
+        </td>
+        <main class="flex-fill">
+            <div class="container">
+                <div class="pb-2 mt-2 mb-4 border-bottom title">
+                    <label class="lb-lg">
+                        <h2>Produtos</h2>
+                    </label>
+                    <button sec:authorize="isAuthenticated()" th:if='${currentUser.role.equals("ADMIN")}'
+                        onclick="location.href='alterproduct'"
+                        class="btn btn-dark float-right btn-sm button-new">Adicionar
+                        Produto</button>
+                </div>
             </div>
 
-        </span>
-
-        <span th:case="altered">
-
-            <div id="moo"
-                class="alert alert-success alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                Produto alterado com sucesso!
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <table class="table table-bordered table-hover table-fit2 table-gl text-center align-middle"
+                        id="productTable">
+                        <caption>Lista de Produtos</caption>
+                        <thead class="text-white" style="background-color:black;">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Produto</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Tamanho</th>
+                                <th scope="col">Preço</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
+        </main>
 
-        </span>
-
-        <span th:case="created">
-
-            <div id="moo"
-                class="alert alert-success alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                Produto criado com sucesso!
-            </div>
-
-        </span>
-
-        <span th:case="notfound">
-
-            <div id="moo" class="alert alert-danger alert-dismissible show fade"
-                role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                Produto não encontrado
-            </div>
-
-        </span>
-
-    </td>
-
-    <div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
-            <h2>Produtos</h2>
-        </label><button sec:authorize="isAuthenticated()" th:if='${currentUser.role.equals("ADMIN")}' onclick="location.href='alterproduct'"
-            class="btn btn-dark float-right btn-sm button-new">Adicionar
-            Produto</button></div>
-
-    <div class="d-flex justify-content-center">
-        <table
-            class="table table-bordered table-hover table-fit2 table-sm text-center align-middle"
-            id="productTable">
-            <caption>Lista de Produtos</caption>
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Produto</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Tamanho</th>
-                    <th scope="col">Preço</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-        </table>
     </div>
+    <br><br><br><br>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 
 </body>
 
