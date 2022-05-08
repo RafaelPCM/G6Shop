@@ -11,7 +11,8 @@
     <title>Produtos</title>
 
     <!-- TODO entender pq quando é USER ele retorna certo, mas quando é ADMIN ele nao carrega os dados da tabela -->
-    <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+    <!-- TODO DEPRECATED - Esse codigo ta aqui apenas pra estudar o uso do th:if e th:unless com ADMIN e USER -->
+    <!-- <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
         /*<![CDATA[*/
         var users = /*[[${users}]]*/ 'users';
         /*]]>*/
@@ -58,10 +59,10 @@
                 return 'b';
             }
         }
-    </script>
+    </script> -->
 
 
-    <script th:inline="javascript">
+    <script th:if='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
         /*<![CDATA[*/
         var products = /*[[${products}]]*/ 'products';
         /*]]>*/
@@ -92,8 +93,8 @@
 
                     {
                         "mRender": function (data, type, full) {
-                            // return "<a class='btn btn-outline-warning btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
-                            return alterProductButton(full);
+                            return "<a class='btn btn-outline-warning btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
+                            // return alterProductButton(full);
                         }, "orderable": false
                     }
                     // TODO remover botoes de adicionar, alterar e remover para usuarios comuns
@@ -103,14 +104,58 @@
                     ,
                     {
                         "mRender": function (data, type, full) {
-                            // return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteproduct?id=" + full["id"] + "'>Excluir</button>";
-                            return deleteProductButton(full);
+                            return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteproduct?id=" + full["id"] + "'>Excluir</button>";
+                            // return deleteProductButton(full);
                         }, "orderable": false
                     }
                 ]
             });
         });
     </script>
+
+<script th:unless='${currentUser.role.equals("ADMIN")}' th:inline="javascript">
+    /*<![CDATA[*/
+    var products = /*[[${products}]]*/ 'products';
+    /*]]>*/
+    $(document).ready(function () {
+        var table = $('#productTable').DataTable({
+            "data": products,
+            "sAjaxDataProp": "",
+            "oLanguage": oLanguage,
+            "pageLength": 50,
+            "createdRow": function (row, data, dataIndex) {
+                if (dataIndex % 2 == 0) {
+                    console.log(dataIndex);
+                    $(row).addClass('table-secondary');
+                } else {
+                    $(row).addClass('table-active');
+                }
+            },
+            "aoColumns": [
+                { "mData": "id" },
+                {
+                    "mRender": function (data, type, full) {
+                        return '<img style="max-height:50px;max-width:50px;" src="/images/repo/' + full["drawablePath"] + '" alt="Sem logo" />';
+                    }, "orderable": false
+                },
+                { "mData": "name" },
+                { "mData": "size" },
+                { "mData": "price" },
+
+                {
+                    "mRender": function (data, type, full) {
+                        return "";
+                    }, "orderable": false
+                },
+                {
+                    "mRender": function (data, type, full) {
+                        return "<a class='btn btn-outline-danger btn-sm' type='button' href='/buyproduct?id=" + full["id"] + "'>Comprar</button>";
+                    }, "orderable": false
+                }
+            ]
+        });
+    });
+</script>
 
 </head>
 

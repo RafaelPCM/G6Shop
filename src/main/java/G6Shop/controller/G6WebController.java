@@ -106,6 +106,11 @@ public class G6WebController {
     return "login";
   }
 
+  @GetMapping("/buyproduct")
+  public String buyProduct(Model model) throws IOException {
+    return "buyproduct";
+  }
+
   private void updateDrawablePath(ModelWithDrawablePath modelWithDrawablePath, String noImageCheckBox,
       MultipartFile file) throws IOException {
     if (noImageCheckBox == null) {
@@ -120,8 +125,6 @@ public class G6WebController {
     }
   }
 
-  // TODO fazer com que assim que o usuario crie sua conta, logue automaticamente
-  //      e possa ver a pagina com seu usuario para poder alterar caso queira
   @GetMapping("/users")
   public String users(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
     List<User> users = new ArrayList<>();
