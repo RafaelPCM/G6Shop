@@ -1,70 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="https://www.thymeleaf.org"
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head th:include="fragments/fragments :: source-includes">
 
 	<title>Login</title>
+	<link href="css/style.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
 </head>
-<br>
-<br>
-<br>
-<br>
-<div class="container">
 
-	<body style="background-color: black;">
-		<div class="d-flex justify-content-center vertical-center">
-			<article class="card-body col-md-5 text-center ">
-				<div class="marginBottom">
-					<img onclick="location.href = '/home';" th:src="@{/images/favicon.ico}" alt="logo"
-						style="width: 170px;">
-				</div>
-				<br>
-				<h5 class="card-title text-center mb-4 mt-1 " style="color:white">Acessar a G6Shop</h5>
+<br>
 
-				<div th:if="${param.error}" style="color:white">
-					Nome ou senha inválida.
-				</div>
-				<div th:if="${param.logout}" style="color:white">
-					Você saiu do sistema.
-				</div>
 
-				<form th:action="@{/login}" method="POST">
-					<div class="form-group">
+<body style="background-color: black;" class="text-center">
+	<div class="container text-center teste">
+		<div class="d-flex justify-content-center">
+			<article class="card-body col-md-7 text-center ">
+				<form th:action="@{/login}" method="POST" class="mb-2 text-center">
+					<div class="form-group" style="background-color: black;">
+						<img onclick="location.href = '/home';" th:src="@{/images/favicon.ico}" alt="logo"
+							class="col-md-12" style="background-color: pink;">
+						<br>
+						<div th:if="${param.error}" style="color:white">
+							Nome ou senha inválida.
+						</div>
+						<div th:if="${param.logout}" style="color:white">
+							Você saiu do sistema.
+						</div>
+
+						<h5 class="card-title text-center mb-4 mt-1 " style="color:white">Acessar a G6Shop</h5>
 						<div class="input-group">
 							<div class="input-group-prepend">
-								<span class="input-group-text"> <em
-										class="fa fa-user"></em></span>
+								<span class="input-group-text"> <em class="fa fa-user"></em></span>
 							</div>
-							<input name="username" class="form-control"
-								placeholder="Login" type="text" id="IdEmail">
+							<input name="username" class="form-control" placeholder="Login" type="text" id="IdEmail">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-prepend">
-								<span class="input-group-text"> <em
-										class="fa fa-lock"></em> </span>
+								<span class="input-group-text"> <em class="fa fa-lock"></em> </span>
 							</div>
-							<input name="password" class="form-control"
-								placeholder="******" type="password"
+							<input name="password" class="form-control" placeholder="******" type="password"
 								id="IdSenha">
 						</div>
 					</div>
-					<input type="submit" value="Entrar"
-						class="btn btn-primary btn-block"></input>
+					<input type="submit" value="Entrar" class="btn btn-dark btn-block"></input>
 				</form>
+				<br>
+				<div class="container text-white">
+					Criar conta? Clique <a class="mt-4 text-white" href='usercreateuser'><b>aqui</b>.</a>
+				</div>
 
-				<!-- TODO estilizar bonitinho -->
-				<button onclick="location.href='usercreateuser'">Criar conta</button>
 			</article>
 		</div>
-	</body>
+	</div>
+</body>
 
-	<div th:replace="fragments/fragments :: footer"> </div>
+<div th:replace="fragments/fragments :: footer"> </div>
 
 </div>
-
 
 </html>

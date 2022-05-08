@@ -3,6 +3,10 @@
 
 <head th:include="fragments/fragments :: source-includes">
     <div th:replace="fragments/fragments :: header"> </div>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
 
     <title>Produtos</title>
 
@@ -111,77 +115,95 @@
 </head>
 
 <body>
+    <div class="d-flex flex-column wrapper">
 
-    <td th:switch="${status}">
+        <td th:switch="${status}">
 
-        <span th:case="deleted">
+            <span th:case="deleted">
 
-            <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span>
-                </button>
-                Produto deletado com sucesso!
+                <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto deletado com sucesso!
+                </div>
+
+            </span>
+
+            <span th:case="altered">
+
+                <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto alterado com sucesso!
+                </div>
+
+            </span>
+
+            <span th:case="created">
+
+                <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto criado com sucesso!
+                </div>
+
+            </span>
+
+            <span th:case="notfound">
+
+                <div id="moo" class="alert alert-danger alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Produto não encontrado
+                </div>
+
+            </span>
+
+        </td>
+        <main class="flex-fill">
+            <div class="container">
+                <div class="pb-2 mt-2 mb-4 border-bottom title">
+                    <label class="lb-lg">
+                        <h2>Produtos</h2>
+                    </label>
+                    <button sec:authorize="isAuthenticated()" th:if='${currentUser.role.equals("ADMIN")}'
+                        onclick="location.href='alterproduct'"
+                        class="btn btn-dark float-right btn-sm button-new">Adicionar
+                        Produto</button>
+                </div>
             </div>
 
-        </span>
-
-        <span th:case="altered">
-
-            <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span>
-                </button>
-                Produto alterado com sucesso!
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <table class="table table-bordered table-hover table-fit2 table-gl text-center align-middle"
+                        id="productTable">
+                        <caption>Lista de Produtos</caption>
+                        <thead class="text-white" style="background-color:black;">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Produto</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Tamanho</th>
+                                <th scope="col">Preço</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
+        </main>
 
-        </span>
-
-        <span th:case="created">
-
-            <div id="moo" class="alert alert-success alert-dismissible show fade" role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span>
-                </button>
-                Produto criado com sucesso!
-            </div>
-
-        </span>
-
-        <span th:case="notfound">
-
-            <div id="moo" class="alert alert-danger alert-dismissible show fade" role="alert" auto-close="4000">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span>
-                </button>
-                Produto não encontrado
-            </div>
-
-        </span>
-
-    </td>
-
-    <div class="pb-2 mt-4 mb-4 border-bottom title"><label class="lb-lg">
-            <h2>Produtos</h2>
-        </label><button sec:authorize="isAuthenticated()" th:if='${currentUser.role.equals("ADMIN")}'
-            onclick="location.href='alterproduct'" class="btn btn-dark float-right btn-sm button-new">Adicionar
-            Produto</button></div>
-
-    <div class="d-flex justify-content-center">
-        <table class="table table-bordered table-hover table-fit2 table-sm text-center align-middle" id="productTable">
-            <caption>Lista de Produtos</caption>
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Produto</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Tamanho</th>
-                    <th scope="col">Preço</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-        </table>
     </div>
+    <br><br><br><br>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 
 </body>
 

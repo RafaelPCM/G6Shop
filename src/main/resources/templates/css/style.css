@@ -1,0 +1,13 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper{
+    min-height: 100vh;
+}
+
+.teste{
+    margin-bottom: 100px;
+    background-color: aquamarine;
+}

@@ -4,27 +4,21 @@
 <div th:fragment="source-includes">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
-    <script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-        
+
 
 
     <style>
@@ -32,30 +26,31 @@
         .table th {
             vertical-align: middle;
         }
-        .current_image{
-            max-height:50px !important;
-            max-width:50px !important;
-            background-color:#afafb1;
+
+        .current_image {
+            max-height: 50px !important;
+            max-width: 50px !important;
+            background-color: #afafb1;
         }
     </style>
 
 
-<style>
-    /* Outro jeito de por o "*" */
-    /* .required {
+    <style>
+        /* Outro jeito de por o "*" */
+        /* .required {
     position: absolute;
     margin-left: -50px;
     margin-top: -45px;
     color: #FB0000;
     font-size: 20px; */
 
-    .mandatory {
-    position: absolute;
-    margin-top: -5px;
-    color: #FB0000;
-    font-size: 24px;
-}
-</style>
+        .mandatory {
+            position: absolute;
+            margin-top: -5px;
+            color: #FB0000;
+            font-size: 24px;
+        }
+    </style>
 
     <!-- Outro jeito de por o "*" -->
     <!-- <script>
@@ -133,91 +128,101 @@
 
 <header th:fragment="header">
 
-    <nav navbar-dark class="navbar navbar-expand-sm navbar-dark border-bottom shadow-sm" style="background-color:#000000">
-        <!-- Brand/logo -->
-            <a class="navbar-brand" href="/"> <img src="/images/favicon.ico"
-                alt="logo" id="favicon" style="width: 40px;">
-        </a>
-        
-        <!-- TODO caso queira adicionar uma homepage so alterar o href -->
-        <a class="navbar-brand" style="color:rgb(255, 255, 255)">
-            <strong>Loja Online G6</strong>
-        </a>
+    <!--Navegação    -->
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom shadow-lg mb-3" style="background-color:black">
+        <div class="container">
+            <a class="navbar-brand" href="home"> <img src="/images/favicon.ico" alt="logo" id="favicon"
+                    style="width: 40px;">
+            </a>
+            <!-- TODO caso queira adicionar uma homepage so alterar o href -->
+            <a class="navbar-brand" style="color:rgb(255, 255, 255)" href="home">
+                <strong>Loja Online G6</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav flex-grow-1">
+                    <li sec:authorize="!isAuthenticated()" id="products" class="nav-item">
+                        <a class="nav-link" href="/login">
+                            Produtos
+                        </a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" id="products" class="nav-item">
+                        <a class="nav-link" href="/products">
+                            Produtos
+                        </a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" id="users" class="nav-item">
+                        <a class="nav-link" href="/users">
+                            Usuários
+                        </a>
+                    </li>
+                </ul>
 
-        <ul class="navbar-nav">
+                <script>
+                    "use strict";
+                    var path = window.location.pathname;
+                    var page = path.split("/").pop();
+                    var timeLi = $("#" + page);
+                    timeLi.addClass("active");
+                </script>
 
-            <li sec:authorize="!isAuthenticated()" id="products" class="nav-item">
-                <a class="nav-link" href="/login">
-                    Produtos
-                </a>
-            </li>
-
-            <li sec:authorize="isAuthenticated()" id="products" class="nav-item">
-                <a class="nav-link" href="/products">
-                    Produtos
-                </a>
-            </li>
-
-            <li sec:authorize="isAuthenticated()" id="users" class="nav-item">
-                <a class="nav-link" href="/users">
-                    Usuários
-                </a>
-            </li>
-
-        </ul>
-
-        
-
-        <script>
-            "use strict";
-            var path = window.location.pathname;
-            var page = path.split("/").pop();
-            var timeLi = $("#" + page);
-            timeLi.addClass("active");
-        </script>
-
-        <!-- Logout -->
-        <ul class="navbar-nav ml-auto text-center">
-            <li class="nav-item mr-2 mt-1">
-                <span sec:authorize="isAuthenticated()" style="color:white">
-                    <!-- TODO ajeitar a cor disso -->
-                    Logado como: <span sec:authentication="name" style="color:rgb(255, 255, 255)"></span></span>
-            </li>
-            <li class="nav-item">
-                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
-                    <!-- TODO fazer com que a pagina de Logout redirecione para /products, porem sem usuario -->
-                    <input class="btn btn-info btn-sm" type="submit"
-                        value="Sair" onclick="location.href='/products'"/>
-                </form>
-            </li>
-        </ul>
-
-        <ul class="navbar-nav ml-auto text-center">
-            <li class="nav-item">
-                <form sec:authorize="!isAuthenticated()" th:action="@{/login}" method="GET">
-                    <input class="btn btn-info btn-sm" type="submit"
-                        value="Logar" />
-                </form>
-            </li>
-            <li class="nav-item">
-                <form sec:authorize="!isAuthenticated()" th:action="@{/usercreateuser}" method="GET">
-                    <input class="btn btn-info btn-sm" type="submit"
-                        value="Criar Conta" />
-                </form>
-            </li>
-        </ul>
+                <!-- Logout -->
+                <ul class="navbar-nav ml-auto" >
+                    <li class="nav-item mr-2 mt-1 mb-1">
+                        <span sec:authorize="isAuthenticated()" style="color:white">
+                            <!-- TODO ajeitar a cor disso -->
+                            Logado como: <span sec:authentication="name" style="color:rgb(255, 255, 255)"></span>
+                        </span>
+                    </li>
+                    <li class="nav-item mt-1">
+                        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                            <!-- TODO fazer com que a pagina de Logout redirecione para /products, porem sem usuario -->
+                            <input class="btn btn-outline-danger btn-sm" type="submit" value="Sair" style="border-radius:100px ;"
+                                onclick="location.href='/products'" />
+                        </form>
+                    </li>
+                </ul>
+                <div class="align-self-end">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <form sec:authorize="!isAuthenticated()" th:action="@{/login}" method="GET">
+                                <input class="btn btn-outline-dark btn-sm mr-1 mb-1" type="submit" value="Logar" style="border-radius:10px ;"/>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form sec:authorize="!isAuthenticated()" th:action="@{/usercreateuser}" method="GET">
+                                <input class="btn btn-outline-dark mb-1 mr-1 btn-sm" type="submit" value="Criar Conta"  style="border-radius:10px ;"/>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </nav>
 </header>
 
 Footer
-<footer th:fragment="footer" class="navbar row d-flex justify-content-center" style="color:rgb(100, 100, 100)">
+<footer th:fragment="footer" class="text-muter mt-3">
     <!-- Copyright -->
+    <div class="container">
+        <div class="row py-3">
+            <div class="col-12 col-md-12 text-center page-footer">
+                &copy; 2022 - Loja Online G6 <br> Todos os direitos reservados.
+            </div>
+        </div>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!--<footer th:fragment="footer" class="navbar row d-flex justify-content-center" style="color:rgb(100, 100, 100)">
+    <!-- Copyright
     <div class="page-footer font-small blue text-center">
         2022 - G6Shop <br />
         Todos os os direitos reservados.
-    </div> 
-    <!-- Copyright -->
-</footer>
+    </div>
+    <!-- Copyright
+</footer> -->
 
 
 <!-- script para por a data e hora atual no input -->
@@ -290,24 +295,19 @@ Footer
     </script>
 
     <div class="form-group row">
-        <label path="file" class="col-sm-3 col-form-label">Nova imagem (Max 10
+        <label path="file" class="col-md-6 col-form-label">Nova imagem (Max 10
             MB):</label>
-        <div class="col-sm-9">
-            <input type="checkbox" name="no_image_checkbox"
-                id="no_image_checkbox" unchecked> Remover
+        <div class="col-md-6">
+            <input type="checkbox" name="no_image_checkbox" id="no_image_checkbox" unchecked> Remover
             imagem</input>
             <br>
             <br>
-            <input type="file" accept="image/*" class="form-control" name="file"
-                id="file">
+            <input type="file" accept="image/*" class="form-control" name="file" id="file">
             <br>
-            <img id="blah" src="" alt=""
-                style="max-width: 400px; max-height: 400px;" />
+            <img id="blah" src="" alt="" style="max-width: 400px; max-height: 400px;" />
             <br>
-            <button class="btn btn-dark btn-sm mt-2" type="button"
-                id="removeFile"
-                onclick="clearInputFile(document.getElementById('file'))"
-                hidden>Remover
+            <button class="btn btn-dark mt-2" type="button" id="removeFile"
+                onclick="clearInputFile(document.getElementById('file'))" hidden>Remover
                 imagem</button>
         </div>
     </div>
@@ -317,12 +317,12 @@ Footer
 <!-- Botoes de enviar e cancelar -->
 <div th:fragment="submitAndCancelButtons">
     <div class="form-group row">
-        <span class="col-sm-3">
-            <button class="btn btn-primary" type="submit">Salvar</button>
+        <span class="col-sm-6">
+           <!--<button class="btn btn-outline-dark" type="submit">Salvar</button>-->
         </span>
         <span class="col-sm-9">
-            <button class="btn btn-danger" type="button"
-                onclick="javascript:history.back()">Cancelar</button>
+            <button class="btn btn-outline-dark" type="submit">Salvar</button>
+            <button class="btn btn-outline-danger" type="button" onclick="javascript:history.back()">Cancelar</button>
         </span>
     </div>
 </div>
