@@ -69,7 +69,7 @@ public class G6WebController {
 
   enum Page {
     PRODUCTS("products"),USERS("users"), ALTERUSER("alteruser"), PRODUTO("produto"),
-    LOGIN("login"), HOME("home");
+    LOGIN("login"), HOME("home"), BUYPRODUCT("buyproduct");
 
     String name;
 
