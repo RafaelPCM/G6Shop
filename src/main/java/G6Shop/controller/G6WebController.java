@@ -424,7 +424,7 @@ public class G6WebController {
     @RequestParam(value = "price", required = false) Integer price,
     @RequestParam(value = "file", required = false) MultipartFile file,
     @RequestParam(value = "stock", required = false) Integer stock,
-    @RequestParam(value = "buystock", required = false) Integer buystock) throws IllegalStateException, IOException {
+    @RequestParam(value = "buystock", required = true) Integer buystock) throws IllegalStateException, IOException {
 
     Optional<Products> optionalCurrentProduct = productRepositoryManager.findById(id);
 

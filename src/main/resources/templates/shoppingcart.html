@@ -48,7 +48,7 @@
 				<label for="name" class=" col-md-6">Nome do Produto: <span class="mandatory">*</span>
 				</label>
 				<div class="col-md-6">
-					<input type="text"  th:field="*{name}" id="name" name="name" >
+					<input type="text"  th:field="*{name}" id="name" name="name" readonly>
 					<input type="hidden" th:field="*{id}" />
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 				<label class="col-md-6">Tamanho: <span class="mandatory">*</span>
 				</label>
 				<div class="col-md-6">
-					<input type="text" class="form-control validate" th:field="*{size}" id="size" name="size">
+					<input type="text" class="form-control validate" th:field="*{size}" id="size" name="size" readonly>
 				</div>
 			</div>
 
@@ -65,8 +65,7 @@
 				<label class="col-md-6">Preco: <span class="mandatory">*</span>
 				</label>
 				<div class="col-md-6">
-					<input type="text" class="form-control validate" th:field="*{price}" id="price" name="price"
-						>
+					<input type="text" class="form-control validate" th:field="*{price}" id="price" name="price" readonly>
 				</div>
 			</div>
 
@@ -74,8 +73,7 @@
 				<label class="col-md-6">Quantidade do Estoque: <span class="mandatory">*</span>
 				</label>
 				<div class="col-md-6">
-					<input type="text" class="form-control validate" th:field="*{stock}" id="stock" name="stock"
-						>
+					<input type="text" class="form-control validate" th:field="*{stock}" id="stock" name="stock" readonly>
 				</div>
 			</div>
 
@@ -83,8 +81,8 @@
 				<label class="col-md-6">Quantidade desejada: <span class="mandatory">*</span>
 				</label>
 				<div class="col-md-6">
-					<input type="text" class="form-control validate" th:field="*{buystock}" id="buystock" name="buystock"
-						>
+					<input type="text" class="form-control validate" th:field="*{buystock}" id="buystock" name="buystock" 
+						required aria-required="true">
 				</div>
 			</div>
 
