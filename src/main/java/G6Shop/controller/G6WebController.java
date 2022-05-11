@@ -106,61 +106,6 @@ public class G6WebController {
     return "login";
   }
 
-  @GetMapping("/shoppingcart")
-  public String shoppingCart (Model model, RedirectAttributes attributes,
-    @RequestParam(value = "id", required = false) Integer id) {
-  Products product;
-  if (id != null) {
-    model.addAttribute(NEW_ENTITY, false);
-    Optional<Products> optionalCurrentProduct = productRepositoryManager.findById(id);
-    if (optionalCurrentProduct.isPresent()) {
-      product = optionalCurrentProduct.get();
-    } else {
-      product = new Products();
-    }
-  } else {
-    model.addAttribute(NEW_ENTITY, true);
-    product = new Products();
-  }
-  model.addAttribute("product", product);
-
-    return "shoppingcart";
-  }
-
-  @PostMapping("/shoppingcart")
-  @Transactional
-  public RedirectView shoppingCart(RedirectAttributes attributes, @RequestParam(value = "id", required = false) Integer id,
-      @RequestParam(value = "name", required = false) String name,
-      @RequestParam(value = "size", required = false) String size,
-      @RequestParam(value = "price", required = false) Integer price,
-      @RequestParam(value = "no_image_checkbox", required = false) String noImageCheckBox,
-      @RequestParam(value = "file", required = false) MultipartFile file,
-      @RequestParam(value = "stock", required = false) Integer stock,
-      @RequestParam(value = "buystock", required = false) Integer buystock) throws IllegalStateException, IOException {
-
-    Optional<Products> optionalCurrentProduct = productRepositoryManager.findById(id);
-
-    Products product;
-    
-    if (optionalCurrentProduct.isPresent()) {
-      product = optionalCurrentProduct.get();
-    } else {
-      product = new Products();
-    }
-    product.setName(name);
-    product.setSize(size);
-    product.setPrice(price);
-    updateDrawablePath(product, noImageCheckBox, file);
-    // TODO logica: Pegar o valor que foi inserido no carrinho e subtrair do total do stock
-    product.setBuystock(buystock);
-    Integer result = product.getStock() - product.getBuystock();
-    product.setStock(result);
-
-    productRepositoryManager.save(product);
-
-    attributes.addFlashAttribute(STATUS, Status.ALTERED);
-    return new RedirectView(Page.PRODUCTS.toString());
-  }
 
   private void updateDrawablePath(ModelWithDrawablePath modelWithDrawablePath, String noImageCheckBox,
       MultipartFile file) throws IOException {
@@ -365,7 +310,6 @@ public class G6WebController {
   }
 
 
-// TODO Conseguir visualizar a tabela mesmo sem estar logado ou diferenciar se o usuario esta logado ou nao
   @GetMapping("/products")
   public String products(Model model, @ModelAttribute(STATUS) Object statusAttribute) {
     List<Products> products = new ArrayList<>();
@@ -450,5 +394,59 @@ public class G6WebController {
     return REDIRECT + Page.PRODUCTS.toString();
   }
 
+
+  @GetMapping("/shoppingcart")
+  public String shoppingCart (Model model, RedirectAttributes attributes,
+    @RequestParam(value = "id", required = false) Integer id) {
+    Products product;
+    if (id != null) {
+      model.addAttribute(NEW_ENTITY, false);
+      Optional<Products> optionalCurrentProduct = productRepositoryManager.findById(id);
+      if (optionalCurrentProduct.isPresent()) {
+        product = optionalCurrentProduct.get();
+      } else {
+        product = new Products();
+      }
+    } else {
+      model.addAttribute(NEW_ENTITY, true);
+      product = new Products();
+    }
+    model.addAttribute("product", product);
+
+    return "shoppingcart";
+  }
+
+  @PostMapping("/shoppingcart")
+  @Transactional
+  public RedirectView shoppingCart(RedirectAttributes attributes, @RequestParam(value = "id", required = false) Integer id,
+    @RequestParam(value = "name", required = false) String name,
+    @RequestParam(value = "size", required = false) String size,
+    @RequestParam(value = "price", required = false) Integer price,
+    @RequestParam(value = "file", required = false) MultipartFile file,
+    @RequestParam(value = "stock", required = false) Integer stock,
+    @RequestParam(value = "buystock", required = false) Integer buystock) throws IllegalStateException, IOException {
+
+    Optional<Products> optionalCurrentProduct = productRepositoryManager.findById(id);
+
+    Products product;
+    
+    if (optionalCurrentProduct.isPresent()) {
+      product = optionalCurrentProduct.get();
+    } else {
+      product = new Products();
+    }
+    product.setName(name);
+    product.setSize(size);
+    product.setPrice(price);
+    product.setBuystock(buystock);
+    //logica: Pegar o valor que foi inserido no carrinho (BuyStock) e subtrair do total do stock
+    Integer result = product.getStock() - product.getBuystock();
+    product.setStock(result);
+
+    productRepositoryManager.save(product);
+
+    attributes.addFlashAttribute(STATUS, Status.ALTERED);
+    return new RedirectView(Page.PRODUCTS.toString());
+  }
 
 }
