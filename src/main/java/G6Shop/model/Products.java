@@ -22,11 +22,6 @@ public class Products implements ModelWithDrawablePath {
 
     private Integer price;
 
-    private Integer stock;
-
-    private Integer buystock;
-
-    
     public int getId() {
         return this.id;
     }
@@ -61,26 +56,6 @@ public class Products implements ModelWithDrawablePath {
 
     public void setPrice(Integer price) {
         this.price = price;
-    }
-
-
-    public Integer getStock() {
-        return this.stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Integer getBuystock() {
-        return this.buystock;
-    }
-
-    public void setBuystock(Integer buystock) {
-        this.buystock = buystock;
     }
 
 }

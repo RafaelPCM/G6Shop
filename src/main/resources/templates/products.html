@@ -90,7 +90,6 @@
                     { "mData": "name" },
                     { "mData": "size" },
                     { "mData": "price" },
-                    { "mData": "stock" },
 
                     {
                         "mRender": function (data, type, full) {
@@ -142,7 +141,6 @@
                 { "mData": "name" },
                 { "mData": "size" },
                 { "mData": "price" },
-                { "mData": "stock" },
 
                 {
                     "mRender": function (data, type, full) {
@@ -151,7 +149,7 @@
                 },
                 {
                     "mRender": function (data, type, full) {
-                        return "<a class='btn btn-outline-danger btn-sm' type='button' href='/shoppingcart?id=" + full["id"] + "'>Comprar</button>";
+                        return "<a class='btn btn-outline-danger btn-sm' type='button' href='/buyproduct?id=" + full["id"] + "'>Comprar</button>";
                     }, "orderable": false
                 }
             ]
@@ -236,7 +234,6 @@
                                 <th scope="col">Nome</th>
                                 <th scope="col">Tamanho</th>
                                 <th scope="col">Preço</th>
-                                <th scope="col">Em Estoque</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
