@@ -106,6 +106,11 @@ public class G6WebController {
     return "login";
   }
 
+  @GetMapping("/buyproduct")
+  public String buyProduct(Model model) throws IOException {
+    return "buyproduct";
+  }
+
 
   private void updateDrawablePath(ModelWithDrawablePath modelWithDrawablePath, String noImageCheckBox,
       MultipartFile file) throws IOException {
@@ -358,7 +363,7 @@ public class G6WebController {
   public RedirectView alterProduct(RedirectAttributes attributes, @RequestParam("id") Integer id,
       @RequestParam("name") String name,
       @RequestParam("size") String size,
-      @RequestParam("price") Integer price,
+      @RequestParam("price") double price,
       @RequestParam(value = "no_image_checkbox", required = false) String noImageCheckBox,
       @RequestParam(value = "file", required = false) MultipartFile file,
       @RequestParam(value = "stock", required = false) Integer stock) throws IllegalStateException, IOException {
@@ -445,8 +450,7 @@ public class G6WebController {
 
     productRepositoryManager.save(product);
 
-    attributes.addFlashAttribute(STATUS, Status.ALTERED);
-    return new RedirectView(Page.PRODUCTS.toString());
+    return new RedirectView(Page.BUYPRODUCT.toString());
   }
 
 }

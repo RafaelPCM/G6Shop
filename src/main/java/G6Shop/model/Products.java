@@ -20,7 +20,7 @@ public class Products implements ModelWithDrawablePath {
     @NonNull
     private String drawablePath;
 
-    private Integer price;
+    private double price;
 
     private Integer stock;
 
@@ -55,11 +55,11 @@ public class Products implements ModelWithDrawablePath {
         this.drawablePath = drawablePath;
     }
 
-    public Integer getPrice() {
+    public double getPrice() {
         return this.price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
