@@ -363,7 +363,7 @@ public class G6WebController {
   public RedirectView alterProduct(RedirectAttributes attributes, @RequestParam("id") Integer id,
       @RequestParam("name") String name,
       @RequestParam("size") String size,
-      @RequestParam("price") double price,
+      @RequestParam("price") Integer price,
       @RequestParam(value = "no_image_checkbox", required = false) String noImageCheckBox,
       @RequestParam(value = "file", required = false) MultipartFile file,
       @RequestParam(value = "stock", required = false) Integer stock) throws IllegalStateException, IOException {
