@@ -90,10 +90,11 @@
                     { "mData": "name" },
                     { "mData": "size" },
                     { "mData": "price" },
+                    { "mData": "stock" },
 
                     {
                         "mRender": function (data, type, full) {
-                            return "<a class='btn btn-outline-warning btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
+                            return "<a class='b4 btn-sm' type='button'  href='/alterproduct?id=" + full["id"] + "'>Alterar</a>";
                             // return alterProductButton(full);
                         }, "orderable": false
                     }
@@ -104,7 +105,7 @@
                     ,
                     {
                         "mRender": function (data, type, full) {
-                            return "<a class='btn btn-outline-danger btn-sm' type='button' href='/deleteproduct?id=" + full["id"] + "'>Excluir</button>";
+                            return "<a class='b2 btn-sm' type='button' href='/deleteproduct?id=" + full["id"] + "'>Excluir</button>";
                             // return deleteProductButton(full);
                         }, "orderable": false
                     }
@@ -141,6 +142,7 @@
                 { "mData": "name" },
                 { "mData": "size" },
                 { "mData": "price" },
+                { "mData": "stock" },
 
                 {
                     "mRender": function (data, type, full) {
@@ -149,7 +151,7 @@
                 },
                 {
                     "mRender": function (data, type, full) {
-                        return "<a class='btn btn-outline-danger btn-sm' type='button' href='/buyproduct?id=" + full["id"] + "'>Comprar</button>";
+                        return "<a class='b4 btn-sm' type='button' href='/shoppingcart?id=" + full["id"] + "'>Comprar</button>";
                     }, "orderable": false
                 }
             ]
@@ -217,14 +219,14 @@
                     </label>
                     <button sec:authorize="isAuthenticated()" th:if='${currentUser.role.equals("ADMIN")}'
                         onclick="location.href='alterproduct'"
-                        class="btn btn-dark float-right btn-sm button-new">Adicionar
+                        class="b3 float-right btn-sm button-new">Adicionar
                         Produto</button>
                 </div>
             </div>
 
             <div class="container">
-                <div class="d-flex justify-content-center">
-                    <table class="table table-bordered table-hover table-fit2 table-gl text-center align-middle"
+                <div class="justify-content-center">
+                    <table class="table table-striped table-hover table-fit2 table-sm text-center"
                         id="productTable">
                         <caption>Lista de Produtos</caption>
                         <thead class="text-white" style="background-color:black;">
@@ -234,6 +236,7 @@
                                 <th scope="col">Nome</th>
                                 <th scope="col">Tamanho</th>
                                 <th scope="col">Preço</th>
+                                <th scope="col">Em Estoque</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
@@ -241,10 +244,10 @@
                     </table>
                 </div>
             </div>
+
         </main>
 
     </div>
-    <br><br><br><br>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

@@ -32,6 +32,50 @@
             max-width: 50px !important;
             background-color: #afafb1;
         }
+
+        .i1 {
+            background-color: #FB0000;
+            width: 100%;
+        }
+
+        .btn-dark {
+            background-color: rgb(255, 89, 0);
+        }
+
+        .b2 {
+            background-color: rgb(255, 89, 0);
+            color: white;
+            font-weight: bold;
+            border: 1px solid rgb(211, 74, 0);
+        }
+
+        .b2:hover {
+            background-color: rgb(39, 39, 39);
+
+        }
+
+        .b3 {
+            background-color: rgb(39, 39, 39);
+            ;
+            color: white;
+            font-weight: bold;
+            border: 1px solid rgb(0, 0, 0);
+        }
+
+        .b3:hover {
+            background-color: rgb(255, 89, 0);
+
+        }
+
+        .current_image {
+            max-height: 50px !important;
+            max-width: 50px !important;
+            background-color: #afafb1;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+        }
     </style>
 
 
@@ -128,6 +172,56 @@
 
 <header th:fragment="header">
 
+    <style>
+        .btn-dark {
+            background-color: rgb(255, 89, 0);
+        }
+
+        .b2 {
+            background-color: rgb(255, 89, 0);
+            color: white;
+            font-weight: bold;
+            border: 1px solid rgb(211, 74, 0);
+        }
+
+        .b2:hover {
+            background-color: rgb(39, 39, 39);
+            text-decoration: none;
+            color: white;
+
+        }
+
+        .b3 {
+            background-color: rgb(39, 39, 39);
+            color: white;
+            font-weight: bold;
+            border: 1px solid rgb(0, 0, 0);
+        }
+
+        .b3:hover {
+            background-color: rgb(255, 89, 0);
+
+
+        }
+
+        .b4 {
+            background-color: rgba(0, 0, 0, 0);
+            color: rgb(255, 89, 0);
+            font-weight: bold;
+            border: 1px solid rgb(255, 89, 0);
+        }
+
+        .b4:hover {
+            background-color: rgb(255, 89, 0);
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+        }
+        .botao{
+            text-align: left;
+            margin-top:50px;
+        }
+    </style>
+
     <!--Navegação    -->
     <nav class="navbar navbar-expand-lg navbar-dark border-bottom shadow-lg mb-3" style="background-color:black">
         <div class="container">
@@ -169,7 +263,7 @@
                 </script>
 
                 <!-- Logout -->
-                <ul class="navbar-nav ml-auto" >
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item mr-2 mt-1 mb-1">
                         <span sec:authorize="isAuthenticated()" style="color:white">
                             <!-- TODO ajeitar a cor disso -->
@@ -179,8 +273,8 @@
                     <li class="nav-item mt-1">
                         <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
                             <!-- TODO fazer com que a pagina de Logout redirecione para /products, porem sem usuario -->
-                            <input class="btn btn-outline-danger btn-sm" type="submit" value="Sair" style="border-radius:100px ;"
-                                onclick="location.href='/products'" />
+                            <input class="b4 btn-sm" type="submit" value="Sair"
+                                style="border-radius:100px ;" onclick="location.href='/products'" />
                         </form>
                     </li>
                 </ul>
@@ -188,12 +282,14 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <form sec:authorize="!isAuthenticated()" th:action="@{/login}" method="GET">
-                                <input class="btn btn-outline-dark btn-sm mr-1 mb-1" type="submit" value="Logar" style="border-radius:10px ;"/>
+                                <input class="b4 btn-sm mr-1 mb-1" type="submit" value="Logar"
+                                    style="border-radius:10px ;" />
                             </form>
                         </li>
                         <li class="nav-item">
                             <form sec:authorize="!isAuthenticated()" th:action="@{/usercreateuser}" method="GET">
-                                <input class="btn btn-outline-dark mb-1 mr-1 btn-sm" type="submit" value="Criar Conta"  style="border-radius:10px ;"/>
+                                <input class="b4 mb-1 mr-1 btn-sm" type="submit" value="Criar Conta"
+                                    style="border-radius:10px ;" />
                             </form>
                         </li>
                     </ul>
@@ -216,12 +312,12 @@ Footer
     <!-- Copyright -->
 </footer>
 <!--<footer th:fragment="footer" class="navbar row d-flex justify-content-center" style="color:rgb(100, 100, 100)">
-    <!-- Copyright
+    Copyright
     <div class="page-footer font-small blue text-center">
         2022 - G6Shop <br />
         Todos os os direitos reservados.
     </div>
-    <!-- Copyright
+     Copyright
 </footer> -->
 
 
@@ -315,15 +411,17 @@ Footer
 </div>
 
 <!-- Botoes de enviar e cancelar -->
-<div th:fragment="submitAndCancelButtons">
-    <div class="form-group row">
-        <span class="col-sm-6">
-           <!--<button class="btn btn-outline-dark" type="submit">Salvar</button>-->
-        </span>
-        <span class="col-sm-9">
-            <button class="btn btn-outline-dark" type="submit">Salvar</button>
-            <button class="btn btn-outline-danger" type="button" onclick="javascript:history.back()">Cancelar</button>
-        </span>
+<div class="container">
+    <div th:fragment="submitAndCancelButtons">
+        <div class="form-group row">
+            <span class="col-sm-6">
+                <!--<button class="btn btn-outline-dark" type="submit">Salvar</button>-->
+            </span>
+            <span class="col-sm-9">
+                <button class="btn b2" type="submit">Salvar</button>
+                <button class="btn b3" type="button" onclick="javascript:history.back()">Cancelar</button>
+            </span>
+        </div>
     </div>
 </div>
 

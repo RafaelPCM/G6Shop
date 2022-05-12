@@ -5,6 +5,7 @@
 <head th:include="fragments/fragments :: source-includes">
 
 	<title>Login</title>
+	<link rel="icon" href="images/logo-01.ico" type="image/icon type" />
 	<link href="css/style.css" type="text/css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -15,9 +16,10 @@
 
 
 <body style="background-color: black;" class="text-center">
-	<div class="container text-center teste">
+	<div class="d-flex flex-column wrapper">
+	<div class="container text-center flex-fill">
 		<div class="d-flex justify-content-center">
-			<article class="card-body col-md-7 text-center ">
+			<article class="card-body col-md-5 text-center ">
 				<form th:action="@{/login}" method="POST" class="mb-2 text-center">
 					<div class="form-group" style="background-color: black;">
 						<img onclick="location.href = '/home';" th:src="@{/images/favicon.ico}" alt="logo"
@@ -57,6 +59,7 @@
 			</article>
 		</div>
 	</div>
+</div>
 </body>
 
 <div th:replace="fragments/fragments :: footer"> </div>

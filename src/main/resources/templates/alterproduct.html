@@ -17,6 +17,7 @@
 </head>
 
 <body>
+	<div class="d-flex flex-column wrapper">
 	<div class="container">
 		<div class="pb-2 mt-4 mb-4 border-bottom title">
 			<label class="lb-lg">
@@ -30,7 +31,7 @@
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="container flex-fill">
 	<div class="col-md-6 justify-content-center titleLike">
 
 		<form th:action="@{alterproduct}" th:object="${product}" method="POST" enctype="multipart/form-data">
@@ -70,6 +71,15 @@
 				</div>
 			</div>
 
+			<div class="form-group row">
+				<label class="col-md-6">Quantidade do Estoque: <span class="mandatory">*</span>
+				</label>
+				<div class="col-md-6">
+					<input type="text" class="form-control validate" th:field="*{stock}" id="stock" name="stock"
+						required aria-required="true">
+				</div>
+			</div>
+
 
 			<div th:unless="${newEntity}" class="form-group row">
 				<label for="id" class="col-md-2 col-form-label">Produto:
@@ -90,6 +100,7 @@
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
+</div>
 </body>
 
 <div th:replace="fragments/fragments :: footer"> </div>
