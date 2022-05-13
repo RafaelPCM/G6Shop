@@ -211,6 +211,17 @@
 
             </span>
 
+            <span th:case="outofstock">
+
+                <div id="moo" class="alert alert-danger alert-dismissible show fade" role="alert" auto-close="4000">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Quantidade desejada selecionada não disponivel no estoque, por favor selecione outra quantidade
+                </div>
+    
+            </span>
+
         </td>
         <main class="flex-fill">
             <div class="container">

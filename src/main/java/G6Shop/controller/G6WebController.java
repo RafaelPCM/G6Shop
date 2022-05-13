@@ -53,7 +53,7 @@ public class G6WebController {
     NOT_FOUND("notfound"), ALTERED("altered"), CREATED("created"), DELETED("deleted"),
     ORDER_ALREADY_EXISTS("order_already_exists"), PRODUCT_NOT_FOUND("product_not_found"),
     USER_ALREADY_EXISTS("user_already_exists"), USER_PASSWORDS_DONT_MATCH("user_passwords_dont_match"),
-    USER_NOT_FOUND("user_not_found");
+    USER_NOT_FOUND("user_not_found"), OUT_OF_STOCK("outofstock");
 
     String name;
 
@@ -69,7 +69,7 @@ public class G6WebController {
 
   enum Page {
     PRODUCTS("products"),USERS("users"), ALTERUSER("alteruser"), PRODUTO("produto"),
-    LOGIN("login"), HOME("home"), BUYPRODUCT("buyproduct");
+    LOGIN("login"), HOME("home"), BUYPRODUCT("buyproduct"), SHOPPINGCART("shoppingcart");
 
     String name;
 
@@ -446,7 +446,12 @@ public class G6WebController {
     product.setBuystock(buystock);
     //logica: Pegar o valor que foi inserido no carrinho (BuyStock) e subtrair do total do stock
     Integer result = product.getStock() - product.getBuystock();
-    product.setStock(result);
+    if(result <= 0) {
+      attributes.addFlashAttribute(STATUS, Status.OUT_OF_STOCK);
+      return new RedirectView(Page.PRODUCTS.toString());
+    } else {
+      product.setStock(result);
+    }
 
     productRepositoryManager.save(product);
 

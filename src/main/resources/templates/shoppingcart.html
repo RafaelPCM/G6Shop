@@ -96,7 +96,7 @@
 								<label class="col-md-12"><b>Quantidade desejada:</b> <span class="mandatory">*</span>
 								</label>
 								<div class="col-md-12">
-									<input type="text" class="form-control validate" th:field="*{buystock}"
+									<input type="number" min='1' max="10" class="form-control validate" th:field="*{buystock}"
 										id="buystock" name="buystock" required aria-required="true">
 								</div>
 							</div>
