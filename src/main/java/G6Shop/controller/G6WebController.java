@@ -446,7 +446,7 @@ public class G6WebController {
     product.setBuystock(buystock);
     //logica: Pegar o valor que foi inserido no carrinho (BuyStock) e subtrair do total do stock
     Integer result = product.getStock() - product.getBuystock();
-    if(result <= 0) {
+    if(result < 0) {
       attributes.addFlashAttribute(STATUS, Status.OUT_OF_STOCK);
       return new RedirectView(Page.PRODUCTS.toString());
     } else {
